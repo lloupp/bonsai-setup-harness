@@ -1,0 +1,316 @@
+{
+  "label": "otimizado",
+  "profile": "padrao",
+  "reps": 2,
+  "score": 0.6875,
+  "por_tarefa": {
+    "logica_ordem": 1.0,
+    "logica_cavaleiros": 1.0,
+    "mat_mult": 1.0,
+    "mat_troco": 1.0,
+    "mat_primos": 0.0,
+    "multietapa_datas": 0.0,
+    "instrucoes_formato": 1.0,
+    "json_estrito": 1.0,
+    "py_palindromo": 1.0,
+    "py_intervalos": 0.0,
+    "js_snake": 0.0,
+    "debug_busca": 1.0,
+    "refatoracao": 1.0,
+    "leitura_arquivo": 1.0,
+    "analise_projeto": 1.0,
+    "planejamento": 0.0
+  },
+  "results": [
+    {
+      "task": "logica_ordem",
+      "rep": 0,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 122,
+      "wall_s": 8.24,
+      "resposta": "Analisando as informações dadas:\n1.  Ana > Bia (Ana é mais alta que Bia)\n2.  Bia > Caio (Bia é mais alta que Caio)\n3.  Davi > Ana (Davi é mais alto/mais baixo - o texto diz \"mais alto\", assumindo referência a altura, então Davi > Ana)\n\nSe sortearmos por altura da maior para a menor:\nDavi > Ana > Bia > Caio\n\nPortanto, quem é o mais baixo é Caio.\n\nRESPOSTA: Caio"
+    },
+    {
+      "task": "logica_ordem",
+      "rep": 1,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 92,
+      "wall_s": 5.5,
+      "resposta": "Analisando as alturas dadas:\n1. Bia é mais alta que Caio (Bia > Caio).\n2. Davi é mais alto que Ana (Davi > Ana).\n3. Ana é mais alta que Bia (Ana > Bia).\n\nJuntando isso: Davi > Ana > Bia > Caio.\n\nPortanto, a pessoa mais baixa é Caio.\n\nRESPOSTA: Caio"
+    },
+    {
+      "task": "logica_cavaleiros",
+      "rep": 0,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 561,
+      "wall_s": 35.76,
+      "resposta": "po.\n        *   Portanto, a afirmação de B seria falsa. Isso significa que B está mentindo.\n        *   Mas no cenário da Hipótese 2, assumimos que B é um cavaleiro (que sempre conta a verdade). Um cavaleiro não pode estar mentindo.\n        *   **Conclusão:** A ser Patife gera uma contradição.\n\n**Resultado Final:**\nA única solução lógica é que A é um Cavaleiro e B é um Patife.\n\nRESPOSTA: cavaleiro"
+    },
+    {
+      "task": "logica_cavaleiros",
+      "rep": 1,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 464,
+      "wall_s": 29.13,
+      "resposta": ".\n*   Agora olhamos para a frase de B: \"A e eu somos do mesmo tipo\". Se A é Patife e B é Cavaleiro, eles NÃO são do mesmo tipo. Portanto, a afirmação de B é falsa.\n*   Como B é um cavaleiro (devido à conclusão anterior), ele deve dizer a verdade. Porém, sua frase é falsa.\n*   **Conclusão:** Este cenário é impossível.\n\nPortanto, o único cenário válido é que A seja um Cavaleiro.\n\nRESPOSTA: cavaleiro"
+    },
+    {
+      "task": "mat_mult",
+      "rep": 0,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 15,
+      "wall_s": 1.39,
+      "resposta": "1591\nRESPOSTA: 1591"
+    },
+    {
+      "task": "mat_mult",
+      "rep": 1,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 15,
+      "wall_s": 0.9,
+      "resposta": "1591\nRESPOSTA: 1591"
+    },
+    {
+      "task": "mat_troco",
+      "rep": 0,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 121,
+      "wall_s": 7.94,
+      "resposta": "Para calcular o valor do troco, primeiro preciso encontrar o custo total das canetas e depois subtrair esse valor do valor pago.\n\n1.  **Custo total:** 14 canetas × R$ 2,50/caneta = R$ 35,00\n2.  **Valor pago:** R$ 50,00\n3.  **Troco:** R$ 50,00 - R$ 35,00 = R$ 15,00\n\nRESPOSTA: 15"
+    },
+    {
+      "task": "mat_troco",
+      "rep": 1,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 86,
+      "wall_s": 5.31,
+      "resposta": "Para calcular o valor da compra: 14 canetas × R$ 2,50 = R$ 35,00.\nO valor pago foi R$ 50,00.\nO troco é: R$ 50,00 - R$ 35,00 = R$ 15,00.\n\nRESPOSTA: 15"
+    },
+    {
+      "task": "mat_primos",
+      "rep": 0,
+      "ok": false,
+      "detail": "",
+      "gen_tokens": 97,
+      "wall_s": 6.19,
+      "resposta": "Os números primos menores que 30 são: 2, 3, 5, 7, 11, 13, 17, 19, 23.\nA soma desses valores é: 2 + 3 + 5 + 7 + 11 + 13 + 17 + 19 + 23 = 110.\n\nRESPOSTA: 110"
+    },
+    {
+      "task": "mat_primos",
+      "rep": 1,
+      "ok": false,
+      "detail": "",
+      "gen_tokens": 93,
+      "wall_s": 5.54,
+      "resposta": "Os números primos menores que 30 são: 2, 3, 5, 7, 11, 13, 17, 19, 23.\n\nSoma: 2 + 3 + 5 + 7 + 11 + 13 + 17 + 19 + 23 = 110\n\nRESPOSTA: 110"
+    },
+    {
+      "task": "multietapa_datas",
+      "rep": 0,
+      "ok": false,
+      "detail": "",
+      "gen_tokens": 365,
+      "wall_s": 23.88,
+      "resposta": " dia da semana se domingo for 1. 4 + 10 = 14. 14 - 14 (2 semanas) = 0, então volta ao início? Melhor: Se hoje é quarta, amanhã quinta, depois sexta, domingo (4 dias), segunda (5), terça (6), quarta (7). Então em 10 dias (2 semanas + 4 dias) será uma quarta-feira. Daqui a 100 dias: 100 mod 7 = 2 (pois 98 é múltiplo de 7). Então Quarta + 2 dias = Sexta-feira.\n\nRESPOSTA: <quarta-feira>, <sexta-feira>"
+    },
+    {
+      "task": "multietapa_datas",
+      "rep": 1,
+      "ok": false,
+      "detail": "",
+      "gen_tokens": 700,
+      "wall_s": 44.35,
+      "resposta": "7 = 6 (Domingo).\nEspera, se hoje é Quarta (3), amanhã quinta (4), dia depois sexto (5), domingo (6), segunda (1), terça (2), quarta (3).\n10 dias após hoje:\n1 dia: 4\n2 dias: 5\n3 dias: 6 (Domingo)\n4 dias: 1 (Segunda)\n5 dias: 2 (Terça)\n6 dias: 3 (Quarta)\n7 dias: 4 (Quinta)\n8 dias: 5 (Sexta)\n9 dias: 6 (Domingo)\n10 dias: 1 (Segunda).\n\nVamos calcular matematicamente:\nDia atual = 4 (Quarta, considerando "
+    },
+    {
+      "task": "instrucoes_formato",
+      "rep": 0,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 13,
+      "wall_s": 1.49,
+      "resposta": "- BANANA\n- LARANJA\n- MORANGO"
+    },
+    {
+      "task": "instrucoes_formato",
+      "rep": 1,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 15,
+      "wall_s": 0.92,
+      "resposta": "- BANANA\n- MANGUEIRA\n- LARANJA"
+    },
+    {
+      "task": "json_estrito",
+      "rep": 0,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 34,
+      "wall_s": 2.78,
+      "resposta": "{\n  \"nome\": \"Assistente\",\n  \"idade\": 30,\n  \"tags\": [\"AI\", \"Voz\"]\n}"
+    },
+    {
+      "task": "json_estrito",
+      "rep": 1,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 34,
+      "wall_s": 2.17,
+      "resposta": "{\n  \"nome\": \"Assistente\",\n  \"idade\": 30,\n  \"tags\": [\"IA\", \"Precisão\"]\n}"
+    },
+    {
+      "task": "py_palindromo",
+      "rep": 0,
+      "ok": true,
+      "detail": "OK_ALL\n",
+      "gen_tokens": 78,
+      "wall_s": 5.24,
+      "resposta": "```python\ndef eh_palindromo(s):\n    import re\n    \n    # Remove tudo que não é letra ou número\n    limpa = re.sub(r'[^a-zA-Z0-9]', '', s).lower()\n    \n    # Verifica se a string limpa é igual ao seu inverso\n    return limpa == limpa[::-1]\n```"
+    },
+    {
+      "task": "py_palindromo",
+      "rep": 1,
+      "ok": true,
+      "detail": "OK_ALL\n",
+      "gen_tokens": 76,
+      "wall_s": 4.33,
+      "resposta": "```python\ndef eh_palindromo(s):\n    # Remove caracteres que não são letras ou números e converte para minúsculas\n    cleaned = ''.join(char.lower() for char in s if char.isalnum())\n    \n    # Verifica se a string limpa é igual ao seu inverso\n    return cleaned == cleaned[::-1]\n```"
+    },
+    {
+      "task": "py_intervalos",
+      "rep": 0,
+      "ok": false,
+      "detail": "Traceback (most recent call last):\n  File \"<USER_DIR>\\AppData\\Local\\Temp\\tmp7m22i3vs\\t.py\", line 24, in <module>\n    assert [list(x) for x in mesclar([[8,10],[1,3],[2,6],[15,18]])]==[[1,6],[8,10],[15,18]]\n                             ^^^^^^^\nNameError: name 'mesclar' is not defined\n",
+      "gen_tokens": 154,
+      "wall_s": 10.2,
+      "resposta": "    \n    for current in intervals[1:]:\n        last = merged[-1]\n        \n        # Verificar se os intervalos se sobrepõem ou tocam\n        if current[0] <= last[1]:\n            # Sobrepõe ou toca, unifica o fim\n            last[1] = max(last[1], current[1])\n        else:\n            # Não sobrepõe, adiciona o atual como novo intervalo\n            merged.append(current)\n    \n    return merged\n```"
+    },
+    {
+      "task": "py_intervalos",
+      "rep": 1,
+      "ok": false,
+      "detail": "Traceback (most recent call last):\n  File \"<USER_DIR>\\AppData\\Local\\Temp\\tmp7fgq05mi\\t.py\", line 24, in <module>\n    assert [list(x) for x in mesclar([[8,10],[1,3],[2,6],[15,18]])]==[[1,6],[8,10],[15,18]]\n                             ^^^^^^^\nNameError: name 'mesclar' is not defined\n",
+      "gen_tokens": 170,
+      "wall_s": 10.36,
+      "resposta": "rrent in intervals[1:]:\n        last = merged[-1]\n        \n        # Verificar se há sobreposição ou contiguidade (tocam)\n        if current[0] <= last[1] + 1:\n            # Mesclamos os intervalos atualizando o fim\n            last[1] = max(last[1], current[1])\n        else:\n            # Não há sobreposição, adiciona um novo intervalo\n            merged.append(current)\n    \n    return merged\n```"
+    },
+    {
+      "task": "js_snake",
+      "rep": 0,
+      "ok": false,
+      "detail": "cuteUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'meu-Nome-Completo',\n  expected: 'meu_nome_completo',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.14.0\n",
+      "gen_tokens": 46,
+      "wall_s": 4.46,
+      "resposta": "```javascript\nfunction camelToSnake(str) {\n  return str.replace(/([a-z0-9])([A-Z])/g, '$1_$2').replace(/_/g, '-');\n}\n```"
+    },
+    {
+      "task": "js_snake",
+      "rep": 1,
+      "ok": false,
+      "detail": "xecuteUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'meunomeCompleto',\n  expected: 'meu_nome_completo',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.14.0\n",
+      "gen_tokens": 63,
+      "wall_s": 3.6,
+      "resposta": "```javascript\nfunction camelToSnake(str) {\n    return str.replace(/(.)([A-Z][a-z]+)/g, function(m, c1, c2) {\n        return c1 + '_' + c2.toLowerCase();\n    }).replace(/_/g, '');\n}\n```"
+    },
+    {
+      "task": "debug_busca",
+      "rep": 0,
+      "ok": true,
+      "detail": "OK_ALL\n",
+      "gen_tokens": 99,
+      "wall_s": 7.29,
+      "resposta": "```python\ndef busca_binaria(lista, alvo):\n    lo, hi = 0, len(lista) - 1\n    while lo <= hi:\n        meio = (lo + hi) // 2\n        if lista[meio] == alvo:\n            return meio\n        elif lista[meio] < alvo:\n            lo = meio + 1\n        else:\n            hi = meio - 1\n    return -1\n```"
+    },
+    {
+      "task": "debug_busca",
+      "rep": 1,
+      "ok": true,
+      "detail": "OK_ALL\n",
+      "gen_tokens": 99,
+      "wall_s": 5.77,
+      "resposta": "```python\ndef busca_binaria(lista, alvo):\n    lo, hi = 0, len(lista) - 1\n    while lo <= hi:\n        meio = (lo + hi) // 2\n        if lista[meio] == alvo:\n            return meio\n        elif lista[meio] < alvo:\n            lo = meio + 1\n        else:\n            hi = meio - 1\n    return -1\n```"
+    },
+    {
+      "task": "refatoracao",
+      "rep": 0,
+      "ok": true,
+      "detail": "OK_ALL\n",
+      "gen_tokens": 80,
+      "wall_s": 7.27,
+      "resposta": "```python\ndef preco_com_taxa(p, adicional=0):\n    base = p * 1.10\n    return round(base + adicional, 2)\n\ntotal_a = preco_com_taxa\ntotal_b = lambda p: preco_com_taxa(p, 5)\ntotal_c = lambda p: preco_com_taxa(p, 12)\n```"
+    },
+    {
+      "task": "refatoracao",
+      "rep": 1,
+      "ok": true,
+      "detail": "OK_ALL\n",
+      "gen_tokens": 113,
+      "wall_s": 6.75,
+      "resposta": "```python\ndef preco_com_taxa(p, adicional=0):\n    # Cálculo unificado: taxa de 10% mais o valor do adicional\n    total = p * 1.10 + adicional\n    return round(total, 2)\n\ndef total_a(p):\n    return preco_com_taxa(p)\n\ndef total_b(p):\n    return preco_com_taxa(p, adicional=5)\n\ndef total_c(p):\n    return preco_com_taxa(p, adicional=12)\n```"
+    },
+    {
+      "task": "leitura_arquivo",
+      "rep": 0,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 10,
+      "wall_s": 2.17,
+      "resposta": "RESPOSTA: 5433"
+    },
+    {
+      "task": "leitura_arquivo",
+      "rep": 1,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 10,
+      "wall_s": 0.68,
+      "resposta": "RESPOSTA: 5433"
+    },
+    {
+      "task": "analise_projeto",
+      "rep": 0,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 8,
+      "wall_s": 3.18,
+      "resposta": "RESPOSTA: app/report.py"
+    },
+    {
+      "task": "analise_projeto",
+      "rep": 1,
+      "ok": true,
+      "detail": "",
+      "gen_tokens": 8,
+      "wall_s": 0.46,
+      "resposta": "RESPOSTA: app/report.py"
+    },
+    {
+      "task": "planejamento",
+      "rep": 0,
+      "ok": false,
+      "detail": "",
+      "gen_tokens": 24,
+      "wall_s": 2.12,
+      "resposta": "RESPOSTA: rodar testes > criar ambiente virtual > instalar dependências > gerar pacote > publicar no PyPI",
+      "rescored": true
+    },
+    {
+      "task": "planejamento",
+      "rep": 1,
+      "ok": false,
+      "detail": "",
+      "gen_tokens": 24,
+      "wall_s": 1.34,
+      "resposta": "RESPOSTA: criar ambiente virtual > rodar testes > instalar dependências > gerar pacote > publicar no PyPI",
+      "rescored": true
+    }
+  ]
+}

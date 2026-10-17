@@ -1,0 +1,343 @@
+<!doctype html><html lang='pt-BR'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Relatório Bonsai</title><style>:root{--bg:#fbfaf7;--fg:#1f2328;--muted:#59636e;--line:#d8dee4;--head:#f1efe9;--accent:#2f6f4f;--code:#f3f2ee}
+@media (prefers-color-scheme:dark){:root{--bg:#161a1d;--fg:#e6edf3;--muted:#9aa4ad;--line:#30363d;--head:#1f252b;--accent:#7bc49b;--code:#1f252b}}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;max-width:980px;margin:0 auto;padding:24px 16px}
+h1{color:var(--accent);line-height:1.25}h2{border-bottom:1px solid var(--line);padding-bottom:4px;margin-top:2em}
+table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;margin:1em 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{background:var(--head)}
+code,pre{background:var(--code);border-radius:4px;font-family:ui-monospace,Consolas,monospace;font-size:13px}code{padding:1px 4px}
+pre{padding:12px;overflow-x:auto}hr{border:0;border-top:1px solid var(--line)}</style></head><body><h1>Relatório final — Bonsai 4B local com Pi, Hermes e Claude Code</h1>
+<p><strong>Máquina:</strong> Intel Core i5-14500T (14 núcleos, 35 W), 16 GB de RAM, sem placa de vídeo dedicada · <strong>Data:</strong> 17/10/2026
+<strong>Modelo:</strong> Ternary Bonsai 2 4B (PrismML), pesos ternários PQ2_0 de 1,1 GB · <strong>Runtime:</strong> fork PrismML do llama.cpp b10777 (CPU)</p>
+<p>Legenda: <strong>VALIDADO</strong> = executado com evidência · <strong>PARCIAL</strong> = incompleto · <strong>FALHOU</strong> = executado sem sucesso · <strong>NÃO TESTADO</strong> = não executado.</p>
+<hr />
+<h2>1. Resumo geral</h2>
+<ul>
+<li>O Bonsai 4B <strong>funciona como agente de programação real</strong> nos três harnesses: criou código, rodou testes e passou num verificador independente (T1 VALIDADO nos três).</li>
+<li>O maior problema era de <strong>integração, não do modelo</strong>. O adaptador do Claude Code mudava o início do prompt a cada turno e obrigava o servidor a reprocessar tudo. Corrigido, o Claude Code ficou <strong>66% mais rápido</strong> na mesma tarefa (701 s → 235 s).</li>
+<li>A configuração do servidor tinha dois gargalos medidos:</li>
+<li>o <strong>cache de atenção em 4 bits</strong> deixava a leitura de textos longos até <strong>56% mais lenta</strong>;</li>
+<li>o <strong>cache de prompts</strong> chegava a ocupar <strong>12 GB de RAM</strong>.</li>
+<li>Corrigindo os dois, o servidor ficou <strong>mais rápido com metade da memória</strong> e sem perda de precisão.</li>
+<li>Ajustar a "criatividade" das respostas para o modo agente aumentou a <strong>taxa de acerto de 56% para 75%</strong> nos testes verificáveis e de <strong>90% para 100%</strong> no uso de ferramentas.</li>
+<li>Limite real: é um modelo pequeno. <strong>Erra contas e lógica com frequência</strong> e é lento para ler textos longos nesta CPU.</li>
+</ul>
+<h2>2. Desempenho do Bonsai 4B</h2>
+<table>
+<thead>
+<tr>
+<th>Métrica (via API, configuração final)</th>
+<th>Valor</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Carregamento do modelo</td>
+<td>6–9 s</td>
+<td>VALIDADO</td>
+</tr>
+<tr>
+<td>Velocidade de escrita (geração)</td>
+<td>17–20 tokens/s</td>
+<td>VALIDADO</td>
+</tr>
+<tr>
+<td>Velocidade de leitura (prompt) curto / 3k / 8k tokens</td>
+<td>63 / 61 / 49 tokens/s</td>
+<td>VALIDADO</td>
+</tr>
+<tr>
+<td>Primeira palavra de uma resposta curta</td>
+<td>~0,6 s (p50 0,57 s, p95 0,60 s)</td>
+<td>VALIDADO</td>
+</tr>
+<tr>
+<td>Prompt de 3k tokens já em cache</td>
+<td>0,60 s, contra 42 s sem cache</td>
+<td>VALIDADO</td>
+</tr>
+<tr>
+<td>RAM do servidor (repouso → após testes)</td>
+<td>3,3 GB → 5,4 GB</td>
+<td>VALIDADO</td>
+</tr>
+<tr>
+<td>Estabilidade (10 requisições seguidas + baterias longas)</td>
+<td>sem erros ou travamentos</td>
+<td>VALIDADO</td>
+</tr>
+<tr>
+<td>Recuperar um fato no início, meio e fim de 8,4k tokens</td>
+<td>9/9 acertos, e manteve uma instrução antiga</td>
+<td>VALIDADO</td>
+</tr>
+<tr>
+<td>Temperatura/throttling</td>
+<td>sensores exigem administrador</td>
+<td>NÃO TESTADO</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Threads:</strong> 6 para escrever e 8 para ler são o ótimo. Com mais que isso entram os núcleos de eficiência e piora.
+<strong>GPU integrada (UHD 770):</strong> testada com a build oficial Vulkan e <strong>2× mais lenta</strong> que a CPU.</p>
+<h2>3. Comparação dos harnesses</h2>
+<table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Pi</th>
+<th>Hermes</th>
+<th>Claude Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1 – função + testes (otimizado)</td>
+<td><strong>VALIDADO, 85 s</strong></td>
+<td>VALIDADO, 155 s</td>
+<td>VALIDADO, 235 s</td>
+</tr>
+<tr>
+<td>T2 – app multi-arquivo + CLI + testes</td>
+<td><strong>VALIDADO, 551 s</strong></td>
+<td>interrompido</td>
+<td>NÃO TESTADO</td>
+</tr>
+<tr>
+<td>T3 – consertar projeto defeituoso</td>
+<td>NÃO TESTADO</td>
+<td>NÃO TESTADO</td>
+<td>NÃO TESTADO</td>
+</tr>
+<tr>
+<td>T5 – subagentes</td>
+<td>sem suporte nativo</td>
+<td>NÃO TESTADO (nativo)</td>
+<td>NÃO TESTADO (nativo)</td>
+</tr>
+<tr>
+<td>Tamanho do prompt fixo</td>
+<td>~1,9k tokens</td>
+<td>~4–5k</td>
+<td>4,5k (enxuto) / 19,8k (completo)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Melhor em tarefas simples e intermediárias medidas: Pi.</strong> Tem o menor prompt fixo e o melhor reaproveitamento de cache.</li>
+<li><strong>Claude Code</strong> tem mais recursos (subagentes, 22 ferramentas), mas é o mais pesado para este hardware. Use <code>-Enxuto</code>.</li>
+<li><strong>Hermes</strong> fica no meio e tem subagentes nativos.</li>
+<li><strong>Não declaro vencedor geral:</strong> os testes T2–T5 ficaram incompletos (detalhes em <code>auditoria/harness_comparison.md</code>).</li>
+</ul>
+<h2>4. Problemas encontrados</h2>
+<table>
+<thead>
+<tr>
+<th>Problema</th>
+<th>Evidência</th>
+<th>Causa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Code reprocessava o prompt inteiro em todo turno (5–6k tokens, 2–3 min cada)</td>
+<td>log do servidor + corpos capturados (<code>auditoria/raw/claude-capture</code>)</td>
+<td>O CLI envia um aviso de sistema que muda a cada turno; o adaptador o colocava no início do prompt. Em modelos híbridos como o Bonsai, isso invalida o cache</td>
+</tr>
+<tr>
+<td>Leitura de textos longos lenta</td>
+<td>33 contra 57 tokens/s com 4k tokens de profundidade</td>
+<td>Cache de atenção em 4 bits (q4_0) é caro de descompactar na CPU</td>
+</tr>
+<tr>
+<td>RAM chegando a 11,9 GB</td>
+<td>memória do processo após os testes</td>
+<td>Cache de prompts com limite padrão de 8 GB</td>
+</tr>
+<tr>
+<td>Loops e chamadas repetidas de ferramenta</td>
+<td>1 de 10 tarefas sem concluir</td>
+<td>Amostragem "criativa" (temp 0,7 + penalidade de presença 1,5)</td>
+</tr>
+<tr>
+<td>Prompt do Claude Code muito grande</td>
+<td>19.822 tokens só de instruções e ferramentas</td>
+<td>Desenho do CLI (22 ferramentas)</td>
+</tr>
+<tr>
+<td>Pi informa sucesso mesmo com falha de conexão</td>
+<td>exit 0 com "Connection error"</td>
+<td>Comportamento do harness</td>
+</tr>
+</tbody>
+</table>
+<p>Lista completa com 15 itens: <code>auditoria/bottlenecks.md</code>.</p>
+<h2>5. Melhorias implementadas</h2>
+<ol>
+<li><strong>Adaptador do Claude Code</strong> mantém os avisos de sistema no lugar certo, e o cache volta a funcionar.</li>
+<li><strong>Cache de atenção f16</strong>, em vez de 4 bits, e <strong>contexto de 64k</strong>, em vez de 262k. Os agentes nunca passaram de ~20k; os 262k só existiam à custa do cache lento.</li>
+<li><strong>Cache de prompts limitado a 2 GB</strong>.</li>
+<li><strong>Perfil "agente"</strong> nos três harnesses: temperatura 0,2 e sem penalidade de presença.</li>
+<li>Harnesses avisados do novo limite de contexto (Pi, Hermes; Claude Code compacta aos 60k).</li>
+<li>Opções novas: <code>-Enxuto</code> (Claude Code), <code>-SemVisao</code>, <code>-Modelo 2B</code>, <code>-Perfil original</code> (desfaz tudo).</li>
+<li>Scripts Linux, modelo 2B, manual simples e bateria de testes reproduzível.</li>
+</ol>
+<p><strong>Testado e descartado:</strong>
+- converter os pesos para Q4_0 (escrita 48% mais lenta);
+- iGPU via Vulkan (2× mais lenta);
+- mais threads;
+- lotes maiores;
+- cache q8_0.</p>
+<h2>6. Antes e depois</h2>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Antes</th>
+<th>Depois</th>
+<th>Ganho</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Leitura de prompt, 8,4k tokens</td>
+<td>31,5 t/s</td>
+<td>49,1 t/s</td>
+<td><strong>+56%</strong></td>
+</tr>
+<tr>
+<td>Leitura de prompt, 3,1k tokens</td>
+<td>43,6 t/s</td>
+<td>60,8 t/s</td>
+<td><strong>+39%</strong></td>
+</tr>
+<tr>
+<td>Prompt de 3k tokens sem cache (até a 1ª palavra)</td>
+<td>51,6 s</td>
+<td>42,2 s</td>
+<td><strong>−18%</strong></td>
+</tr>
+<tr>
+<td>RAM do servidor após a bateria de contexto</td>
+<td>11,9 GB</td>
+<td>5,3 GB</td>
+<td><strong>−56%</strong></td>
+</tr>
+<tr>
+<td>RAM em repouso</td>
+<td>3,6 GB</td>
+<td>3,3 GB</td>
+<td>−9%</td>
+</tr>
+<tr>
+<td>Escrita (geração curta)</td>
+<td>18,2 t/s</td>
+<td>17,0 t/s</td>
+<td>−6% (dentro da variação observada; não confirmado como perda)</td>
+</tr>
+<tr>
+<td>Acerto cognitivo (32 testes verificáveis)</td>
+<td>56,2%</td>
+<td>75,0%</td>
+<td><strong>+18,8 pontos</strong></td>
+</tr>
+<tr>
+<td>Tool calling (10 tarefas com ferramentas reais)</td>
+<td>90%</td>
+<td>100%</td>
+<td>+10 pontos</td>
+</tr>
+<tr>
+<td>Claude Code T1</td>
+<td>701 s</td>
+<td>235 s</td>
+<td><strong>−66%</strong></td>
+</tr>
+<tr>
+<td>Hermes T1</td>
+<td>209 s</td>
+<td>155 s</td>
+<td>−26%</td>
+</tr>
+<tr>
+<td>Pi T1</td>
+<td>89 s</td>
+<td>85 s</td>
+<td>−4%</td>
+</tr>
+</tbody>
+</table>
+<p>Comprovado: velocidades, memória e tempos dos agentes, medidos em execuções reais. Tendência, com amostra pequena (2 repetições): os ganhos de acerto cognitivo e de ferramentas.</p>
+<h2>7. Capacidades e limitações</h2>
+<p><strong>Consegue sozinho (comprovado):</strong>
+- usar ferramentas corretamente: 0 chamadas malformadas em todos os testes;
+- ler e escrever arquivos e rodar testes;
+- escrever funções simples com testes;
+- montar um pacote com CLI e tratamento de erro (Pi T2);
+- achar o arquivo com bug numa descrição de projeto;
+- corrigir uma busca binária quebrada;
+- recuperar informações em textos de 8k tokens.</p>
+<p><strong>Tem dificuldade (comprovado):</strong>
+- aritmética (37×43 virou 1291; soma de primos errada);
+- calendário;
+- consistência de nomes (<code>additional</code> × <code>adicional</code>);
+- casos de borda (<code>HTTPServerError</code>);
+- tarefas sequenciais longas, em que às vezes repete ações.</p>
+<p>Tarefas maiores (T2) exigem muitos ciclos: 26 chamadas e ~9 min no Pi. <strong>Sempre revise o resultado.</strong></p>
+<h2>8. Próximos passos (por impacto × dificuldade)</h2>
+<table>
+<thead>
+<tr>
+<th>Impacto</th>
+<th>Dificuldade</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alto</td>
+<td>Baixa</td>
+<td>Usar <strong>Pi</strong> ou <strong>Claude Code <code>-Enxuto</code></strong> no dia a dia</td>
+</tr>
+<tr>
+<td>Alto</td>
+<td>Média (compra)</td>
+<td><strong>GPU NVIDIA dedicada de 4–6 GB</strong> (há builds CUDA oficiais para PQ2_0). Deve acelerar muito a leitura de prompt, mas é <strong>hipótese não medida</strong>; conferir se o gabinete comporta</td>
+</tr>
+<tr>
+<td>Médio</td>
+<td>Baixa</td>
+<td>Completar os testes T2–T5 (comandos prontos em <code>PROGRESSO.md</code>)</td>
+</tr>
+<tr>
+<td>Médio</td>
+<td>Baixa</td>
+<td>Avaliar o modelo 2B (já baixado) para tarefas muito simples</td>
+</tr>
+<tr>
+<td>Médio</td>
+<td>Média</td>
+<td>Testar speculative decoding por n-gram para edições de código</td>
+</tr>
+<tr>
+<td>Baixo</td>
+<td>Baixa</td>
+<td>Validar os scripts num Linux real</td>
+</tr>
+</tbody>
+</table>
+<h2>Conclusão — melhor configuração encontrada</h2>
+<pre><code>Servidor:   -c 65536  --cache-type-k f16 --cache-type-v f16  --cache-ram 2048
+            -t 6 -tb 8  -b 256 -ub 128  -fa on  (CPU; GPU integrada desativada)
+Amostragem: temperature 0.2, top_p 0.95, top_k 20, presence_penalty 0
+Harness:    Pi para rapidez; Claude Code com -Enxuto quando precisar dos recursos dele
+</code></pre>
+<p>Já é o padrão de <code>iniciar-bonsai.cmd</code>. Para voltar ao anterior: <code>.\iniciar-bonsai.ps1 -Perfil original</code>.</p>
+<hr />
+<p><strong>Arquivos:</strong> <code>MANUAL_SIMPLES.md</code> (como usar) · <code>PROGRESSO.md</code> (o que faltou) · <code>auditoria/</code> (inventário, gargalos, otimizações, comparação, JSONs, scripts e dados brutos).</p>
+<p><strong>Reproduzir:</strong></p>
+<pre><code class="language-powershell">cd auditoria\scripts
+python bench_perf.py novo; python bench_cog.py novo agente 2; python bench_tools.py novo agente 2
+python bench_ctx.py novo 500,2000,5500; python compare.py baseline novo
+python run_agent_test.py pi t1 novo 2400
+</code></pre></body></html>

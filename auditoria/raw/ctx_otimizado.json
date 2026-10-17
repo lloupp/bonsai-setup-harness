@@ -1,0 +1,158 @@
+{
+  "label": "otimizado",
+  "results": [
+    {
+      "palavras": 500,
+      "posicao": 0.1,
+      "prompt_tokens": 831,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 14.3,
+      "pp_tps": 62.68362871076144,
+      "tg_tps": 17.26059908662663,
+      "mem": {
+        "free_mb": 2355,
+        "cpu_s": 836.171875,
+        "priv_mb": 5470,
+        "ws_mb": 3583
+      },
+      "resposta": "OPALA-9629\nBONSAI"
+    },
+    {
+      "palavras": 500,
+      "posicao": 0.5,
+      "prompt_tokens": 831,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 14.0,
+      "pp_tps": 63.386142660315656,
+      "tg_tps": 15.739397548326508,
+      "mem": {
+        "free_mb": 2352,
+        "cpu_s": 912.046875,
+        "priv_mb": 5398,
+        "ws_mb": 3510
+      },
+      "resposta": "JADE-2780\nBONSAI"
+    },
+    {
+      "palavras": 500,
+      "posicao": 0.9,
+      "prompt_tokens": 832,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 13.8,
+      "pp_tps": 63.91874943581332,
+      "tg_tps": 16.311195868917792,
+      "mem": {
+        "free_mb": 2341,
+        "cpu_s": 990.484375,
+        "priv_mb": 5431,
+        "ws_mb": 3544
+      },
+      "resposta": "JADE-6461\nBONSAI"
+    },
+    {
+      "palavras": 2000,
+      "posicao": 0.1,
+      "prompt_tokens": 3105,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 52.7,
+      "pp_tps": 60.0099320786136,
+      "tg_tps": 13.872415395606607,
+      "mem": {
+        "free_mb": 2313,
+        "cpu_s": 1270.53125,
+        "priv_mb": 5465,
+        "ws_mb": 3581
+      },
+      "resposta": "OPALA-1812\nBONSAI"
+    },
+    {
+      "palavras": 2000,
+      "posicao": 0.5,
+      "prompt_tokens": 3108,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 51.9,
+      "pp_tps": 61.10721916322393,
+      "tg_tps": 13.387448374652207,
+      "mem": {
+        "free_mb": 2408,
+        "cpu_s": 1552.359375,
+        "priv_mb": 5426,
+        "ws_mb": 3543
+      },
+      "resposta": "ONIX-4740\nBONSAI"
+    },
+    {
+      "palavras": 2000,
+      "posicao": 0.9,
+      "prompt_tokens": 3107,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 51.8,
+      "pp_tps": 61.131219944226764,
+      "tg_tps": 15.101424945288798,
+      "mem": {
+        "free_mb": 2481,
+        "cpu_s": 1833.640625,
+        "priv_mb": 5420,
+        "ws_mb": 3537
+      },
+      "resposta": "JADE-1200\nBONSAI"
+    },
+    {
+      "palavras": 5500,
+      "posicao": 0.1,
+      "prompt_tokens": 8407,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 163.5,
+      "pp_tps": 51.951717963040316,
+      "tg_tps": 8.28039190457931,
+      "mem": {
+        "free_mb": 2237,
+        "cpu_s": 2729.6875,
+        "priv_mb": 5416,
+        "ws_mb": 3643
+      },
+      "resposta": "RUBI-3177\nBONSAI"
+    },
+    {
+      "palavras": 5500,
+      "posicao": 0.5,
+      "prompt_tokens": 8426,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 177.2,
+      "pp_tps": 48.02985261116865,
+      "tg_tps": 8.152801051585907,
+      "mem": {
+        "free_mb": 2086,
+        "cpu_s": 3637.234375,
+        "priv_mb": 5475,
+        "ws_mb": 3702
+      },
+      "resposta": "RUBI-2277\nBONSAI"
+    },
+    {
+      "palavras": 5500,
+      "posicao": 0.9,
+      "prompt_tokens": 8478,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 180.6,
+      "pp_tps": 47.37336034348737,
+      "tg_tps": 8.170390776173505,
+      "mem": {
+        "free_mb": 2098,
+        "cpu_s": 4472.15625,
+        "priv_mb": 5257,
+        "ws_mb": 3478
+      },
+      "resposta": "JADE-2522\nBONSAI"
+    }
+  ]
+}

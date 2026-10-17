@@ -1,0 +1,28 @@
+# Pesos e binarios: baixados pelos scripts de setup (com SHA256)
+models/*.gguf
+models/*.part
+models/parts/
+bin/
+bin-linux/
+bin-vulkan/
+downloads-vulkan/
+*.zip
+*.tar.gz
+# Execucao local
+logs/
+auditoria/agent-tests/runs/
+auditoria/raw/claude-capture/
+auditoria/backups/
+__pycache__/
+*.pyc
+# Agentes e perfis (nao fazem parte deste repositorio)
+pi-runtime/
+pi-profile/
+hermes-runtime/
+hermes-profile/
+hermes-profile-linux/
+hermes-test/
+claude-test/
+cli-teste/
+pi-teste/
+hermes-teste/

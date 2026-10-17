@@ -1,0 +1,455 @@
+{
+  "data": "2026-10-17",
+  "llama_bench": {
+    "bench_threads.md": "| model                          |       size |     params | backend    | threads |  fa |            test |                  t/s |\n| ------------------------------ | ---------: | ---------: | ---------- | ------: | --: | --------------: | -------------------: |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       4 |   1 |           pp256 |         45.93 ± 0.87 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       4 |   1 |            tg32 |         18.06 ± 0.07 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       6 |   1 |           pp256 |         56.62 ± 0.91 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       6 |   1 |            tg32 |         20.11 ± 0.08 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |   1 |           pp256 |         59.47 ± 0.26 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |   1 |            tg32 |         19.61 ± 0.12 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |      12 |   1 |           pp256 |         53.40 ± 0.36 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |      12 |   1 |            tg32 |         18.19 ± 0.18 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |      14 |   1 |           pp256 |         50.84 ± 0.78 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |      14 |   1 |            tg32 |         17.96 ± 0.11 |\n",
+    "bench_ubatch.md": "| model                          |       size |     params | backend    | threads | n_batch | n_ubatch |  fa |            test |                  t/s |\n| ------------------------------ | ---------: | ---------: | ---------- | ------: | ------: | -------: | --: | --------------: | -------------------: |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   1 |           pp512 |         69.95 ± 1.81 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      256 |   1 |           pp512 |         59.84 ± 0.03 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      512 |   1 |           pp512 |         36.72 ± 0.03 |\n",
+    "bench_ubatch2.md": "| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |       32 |   1 |           pp512 |         67.01 ± 0.95 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |       64 |   1 |           pp512 |         73.22 ± 1.94 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   1 |           pp512 |         67.86 ± 0.54 |\n",
+    "bench_depth_kv.md": "| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |    f16 |   1 |           pp256 |         65.34 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |    f16 |   1 |            tg32 |         16.16 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |    f16 |   1 |   pp256 @ d4096 |         57.21 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |    f16 |   1 |    tg32 @ d4096 |         14.07 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |   q8_0 |   1 |           pp256 |         66.46 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |   q8_0 |   1 |            tg32 |         19.41 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |   q8_0 |   1 |   pp256 @ d4096 |         33.14 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |   q8_0 |   1 |    tg32 @ d4096 |         13.61 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |   q4_0 |   1 |           pp256 |         63.56 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |   q4_0 |   1 |            tg32 |         18.98 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |   q4_0 |   1 |   pp256 @ d4096 |         30.49 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |    f16 |   q4_0 |   1 |    tg32 @ d4096 |         12.92 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |    f16 |   1 |           pp256 |         65.41 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |    f16 |   1 |            tg32 |         18.97 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |    f16 |   1 |   pp256 @ d4096 |         40.92 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |    f16 |   1 |    tg32 @ d4096 |         13.08 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |   q8_0 |   1 |           pp256 |         63.12 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |   q8_0 |   1 |            tg32 |         18.62 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |   q8_0 |   1 |   pp256 @ d4096 |         37.55 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |   q8_0 |   1 |    tg32 @ d4096 |         13.37 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |   q4_0 |   1 |           pp256 |         65.11 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |   q4_0 |   1 |            tg32 |         19.57 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |   q4_0 |   1 |   pp256 @ d4096 |         32.67 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q8_0 |   q4_0 |   1 |    tg32 @ d4096 |         12.95 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |    f16 |   1 |           pp256 |         65.89 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |    f16 |   1 |            tg32 |         18.67 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |    f16 |   1 |   pp256 @ d4096 |         40.78 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |    f16 |   1 |    tg32 @ d4096 |         14.71 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |   q8_0 |   1 |           pp256 |         62.96 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |   q8_0 |   1 |            tg32 |         18.24 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |   q8_0 |   1 |   pp256 @ d4096 |         38.03 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |   q8_0 |   1 |    tg32 @ d4096 |         14.21 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |   q4_0 |   1 |           pp256 |         60.33 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |   q4_0 |   1 |            tg32 |         16.81 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |   q4_0 |   1 |   pp256 @ d4096 |         33.00 ± 0.00 |\n| qwen35 4B PQ2_0 - 2.13 bpw (group 128) |   1.06 GiB |     4.21 B | CPU        |       8 |     512 |      128 |   q4_0 |   q4_0 |   1 |    tg32 @ d4096 |         13.23 ± 0.00 |\n",
+    "bench_fa.md": "       8 |     512 |      128 |   0 |   pp256 @ d4096 |         55.46 ± 0.00 |\n       8 |     512 |      128 |   0 |    tg32 @ d4096 |         14.17 ± 0.00 |\n       8 |     512 |      128 |   1 |   pp256 @ d4096 |         57.06 ± 0.00 |\n       8 |     512 |      128 |   1 |    tg32 @ d4096 |         13.76 ± 0.00 |\n",
+    "bench_q4_0.md": " qwen35 4B Q4_0                 |       6 |     512 |      128 |   1 |           pp512 |         56.57 ± 0.94 |\n qwen35 4B Q4_0                 |       6 |     512 |      128 |   1 |            tg32 |         10.37 ± 0.40 |\n qwen35 4B Q4_0                 |       8 |     512 |      128 |   1 |           pp512 |         56.30 ± 0.51 |\n qwen35 4B Q4_0                 |       8 |     512 |      128 |   1 |            tg32 |         10.39 ± 0.02 |\n qwen35 4B Q4_0                 |       6 |     512 |      512 |   1 |           pp512 |         54.86 ± 0.99 |\n qwen35 4B Q4_0                 |       6 |     512 |      512 |   1 |            tg32 |         10.68 ± 0.02 |\n qwen35 4B Q4_0                 |       8 |     512 |      512 |   1 |           pp512 |         55.32 ± 0.19 |\n qwen35 4B Q4_0                 |       8 |     512 |      512 |   1 |            tg32 |         10.42 ± 0.05 |\n",
+    "bench_vulkan.md": " qwen35 4B PQ2_0 - 2.13 bpw (group 128) | Vulkan     |  99 |       6 |     512 |      128 |   1 |           pp512 |         28.28 ± 1.86 |\n qwen35 4B PQ2_0 - 2.13 bpw (group 128) | Vulkan     |  99 |       6 |     512 |      128 |   1 |            tg32 |          8.62 ± 0.28 |\n qwen35 4B PQ2_0 - 2.13 bpw (group 128) | Vulkan     |  99 |       6 |     512 |      512 |   1 |           pp512 |         30.90 ± 0.05 |\n qwen35 4B PQ2_0 - 2.13 bpw (group 128) | Vulkan     |  99 |       6 |     512 |      512 |   1 |            tg32 |          8.64 ± 0.09 |\n"
+  },
+  "otimizado": {
+    "servidor": "-c 65536 KV f16 -t 6 -tb 8 -b 256 -ub 128 --cache-ram 2048 +mmproj",
+    "desempenho_api": {
+      "tg_tps_curto": 17.03800818348703,
+      "pp_tps_1500": 63.83026546214496,
+      "ttft_1500_s": 21.186140733333257,
+      "ttft_prefixo_frio_s": 42.215943100000004,
+      "ttft_prefixo_cache_s": 0.6023839999998017,
+      "lat_p50_s": 0.5675549499992485,
+      "lat_p95_s": 0.6035507750000761,
+      "ram_priv_mb_repouso": 3264,
+      "ram_priv_mb_final": 5377,
+      "ctx_500_tokens": 831,
+      "ctx_500_pp_tps": 63.329506935630135,
+      "ctx_500_acerto": 1.0,
+      "ctx_500_ram_priv_mb": 5431,
+      "ctx_2000_tokens": 3105,
+      "ctx_2000_pp_tps": 60.749457062021435,
+      "ctx_2000_acerto": 1.0,
+      "ctx_2000_ram_priv_mb": 5420,
+      "ctx_5500_tokens": 8407,
+      "ctx_5500_pp_tps": 49.11831030589878,
+      "ctx_5500_acerto": 1.0,
+      "ctx_5500_ram_priv_mb": 5257
+    },
+    "cognitivo_padrao": {
+      "score": 0.6875,
+      "perfil": "padrao",
+      "por_tarefa": {
+        "logica_ordem": 1.0,
+        "logica_cavaleiros": 1.0,
+        "mat_mult": 1.0,
+        "mat_troco": 1.0,
+        "mat_primos": 0.0,
+        "multietapa_datas": 0.0,
+        "instrucoes_formato": 1.0,
+        "json_estrito": 1.0,
+        "py_palindromo": 1.0,
+        "py_intervalos": 0.0,
+        "js_snake": 0.0,
+        "debug_busca": 1.0,
+        "refatoracao": 1.0,
+        "leitura_arquivo": 1.0,
+        "analise_projeto": 1.0,
+        "planejamento": 0.0
+      }
+    },
+    "cognitivo_agente": {
+      "score": 0.75,
+      "perfil": "agente",
+      "por_tarefa": {
+        "logica_ordem": 1.0,
+        "logica_cavaleiros": 1.0,
+        "mat_mult": 1.0,
+        "mat_troco": 1.0,
+        "mat_primos": 0.0,
+        "multietapa_datas": 0.0,
+        "instrucoes_formato": 1.0,
+        "json_estrito": 1.0,
+        "py_palindromo": 1.0,
+        "py_intervalos": 0.0,
+        "js_snake": 0.0,
+        "debug_busca": 1.0,
+        "refatoracao": 1.0,
+        "leitura_arquivo": 1.0,
+        "analise_projeto": 1.0,
+        "planejamento": 1.0
+      }
+    },
+    "tool_calling_agente": {
+      "score": 1.0,
+      "perfil": "agente",
+      "resultados": [
+        {
+          "task": "t1_leitura_simples",
+          "rep": 0,
+          "ok": true,
+          "iter": 3,
+          "calls": 2,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 12.6
+        },
+        {
+          "task": "t1_leitura_simples",
+          "rep": 1,
+          "ok": true,
+          "iter": 3,
+          "calls": 2,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 7.2
+        },
+        {
+          "task": "t2_sequencial",
+          "rep": 0,
+          "ok": true,
+          "iter": 4,
+          "calls": 3,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 8.4
+        },
+        {
+          "task": "t2_sequencial",
+          "rep": 1,
+          "ok": true,
+          "iter": 4,
+          "calls": 3,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 9.2
+        },
+        {
+          "task": "t3_multiplas",
+          "rep": 0,
+          "ok": true,
+          "iter": 3,
+          "calls": 4,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 10.1
+        },
+        {
+          "task": "t3_multiplas",
+          "rep": 1,
+          "ok": true,
+          "iter": 3,
+          "calls": 4,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 10.5
+        },
+        {
+          "task": "t4_recuperacao_erro",
+          "rep": 0,
+          "ok": true,
+          "iter": 4,
+          "calls": 3,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 8.6
+        },
+        {
+          "task": "t4_recuperacao_erro",
+          "rep": 1,
+          "ok": true,
+          "iter": 4,
+          "calls": 3,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 8.1
+        },
+        {
+          "task": "t5_codigo_executado",
+          "rep": 0,
+          "ok": true,
+          "iter": 3,
+          "calls": 2,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 11.7
+        },
+        {
+          "task": "t5_codigo_executado",
+          "rep": 1,
+          "ok": true,
+          "iter": 3,
+          "calls": 2,
+          "bad_args": 0,
+          "dup_calls": 0,
+          "leaked_text_call": 0,
+          "wall_s": 10.9
+        }
+      ]
+    },
+    "contexto": [
+      {
+        "palavras": 500,
+        "posicao": 0.1,
+        "prompt_tokens": 831,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 14.3,
+        "pp_tps": 62.68362871076144,
+        "tg_tps": 17.26059908662663,
+        "mem": {
+          "free_mb": 2355,
+          "cpu_s": 836.171875,
+          "priv_mb": 5470,
+          "ws_mb": 3583
+        },
+        "resposta": "OPALA-9629\nBONSAI"
+      },
+      {
+        "palavras": 500,
+        "posicao": 0.5,
+        "prompt_tokens": 831,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 14.0,
+        "pp_tps": 63.386142660315656,
+        "tg_tps": 15.739397548326508,
+        "mem": {
+          "free_mb": 2352,
+          "cpu_s": 912.046875,
+          "priv_mb": 5398,
+          "ws_mb": 3510
+        },
+        "resposta": "JADE-2780\nBONSAI"
+      },
+      {
+        "palavras": 500,
+        "posicao": 0.9,
+        "prompt_tokens": 832,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 13.8,
+        "pp_tps": 63.91874943581332,
+        "tg_tps": 16.311195868917792,
+        "mem": {
+          "free_mb": 2341,
+          "cpu_s": 990.484375,
+          "priv_mb": 5431,
+          "ws_mb": 3544
+        },
+        "resposta": "JADE-6461\nBONSAI"
+      },
+      {
+        "palavras": 2000,
+        "posicao": 0.1,
+        "prompt_tokens": 3105,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 52.7,
+        "pp_tps": 60.0099320786136,
+        "tg_tps": 13.872415395606607,
+        "mem": {
+          "free_mb": 2313,
+          "cpu_s": 1270.53125,
+          "priv_mb": 5465,
+          "ws_mb": 3581
+        },
+        "resposta": "OPALA-1812\nBONSAI"
+      },
+      {
+        "palavras": 2000,
+        "posicao": 0.5,
+        "prompt_tokens": 3108,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 51.9,
+        "pp_tps": 61.10721916322393,
+        "tg_tps": 13.387448374652207,
+        "mem": {
+          "free_mb": 2408,
+          "cpu_s": 1552.359375,
+          "priv_mb": 5426,
+          "ws_mb": 3543
+        },
+        "resposta": "ONIX-4740\nBONSAI"
+      },
+      {
+        "palavras": 2000,
+        "posicao": 0.9,
+        "prompt_tokens": 3107,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 51.8,
+        "pp_tps": 61.131219944226764,
+        "tg_tps": 15.101424945288798,
+        "mem": {
+          "free_mb": 2481,
+          "cpu_s": 1833.640625,
+          "priv_mb": 5420,
+          "ws_mb": 3537
+        },
+        "resposta": "JADE-1200\nBONSAI"
+      },
+      {
+        "palavras": 5500,
+        "posicao": 0.1,
+        "prompt_tokens": 8407,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 163.5,
+        "pp_tps": 51.951717963040316,
+        "tg_tps": 8.28039190457931,
+        "mem": {
+          "free_mb": 2237,
+          "cpu_s": 2729.6875,
+          "priv_mb": 5416,
+          "ws_mb": 3643
+        },
+        "resposta": "RUBI-3177\nBONSAI"
+      },
+      {
+        "palavras": 5500,
+        "posicao": 0.5,
+        "prompt_tokens": 8426,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 177.2,
+        "pp_tps": 48.02985261116865,
+        "tg_tps": 8.152801051585907,
+        "mem": {
+          "free_mb": 2086,
+          "cpu_s": 3637.234375,
+          "priv_mb": 5475,
+          "ws_mb": 3702
+        },
+        "resposta": "RUBI-2277\nBONSAI"
+      },
+      {
+        "palavras": 5500,
+        "posicao": 0.9,
+        "prompt_tokens": 8478,
+        "acertou": true,
+        "seguiu_instrucao_antiga": true,
+        "wall_s": 180.6,
+        "pp_tps": 47.37336034348737,
+        "tg_tps": 8.170390776173505,
+        "mem": {
+          "free_mb": 2098,
+          "cpu_s": 4472.15625,
+          "priv_mb": 5257,
+          "ws_mb": 3478
+        },
+        "resposta": "JADE-2522\nBONSAI"
+      }
+    ],
+    "agentes": [
+      {
+        "harness": "claude",
+        "test": "t1",
+        "label": "otimizado",
+        "ok": true,
+        "timed_out": false,
+        "wall_s": 234.9,
+        "model_calls": 5,
+        "prompt_tokens_processed": 6735,
+        "prompt_time_s": 124.4,
+        "gen_tokens": 1298,
+        "harness_peak_rss_mb": 188
+      },
+      {
+        "harness": "hermes",
+        "test": "t1",
+        "label": "otimizado",
+        "ok": true,
+        "timed_out": false,
+        "wall_s": 155.0,
+        "model_calls": 3,
+        "prompt_tokens_processed": 5385,
+        "prompt_time_s": 95.5,
+        "gen_tokens": 557,
+        "harness_peak_rss_mb": 40
+      },
+      {
+        "harness": "pi",
+        "test": "t1",
+        "label": "otimizado",
+        "ok": true,
+        "timed_out": false,
+        "wall_s": 85.4,
+        "model_calls": 4,
+        "prompt_tokens_processed": 2499,
+        "prompt_time_s": 40.8,
+        "gen_tokens": 686,
+        "harness_peak_rss_mb": 90
+      },
+      {
+        "harness": "pi",
+        "test": "t2",
+        "label": "otimizado",
+        "ok": true,
+        "timed_out": false,
+        "wall_s": 551.2,
+        "model_calls": 26,
+        "prompt_tokens_processed": 4701,
+        "prompt_time_s": 101.0,
+        "gen_tokens": 5319,
+        "harness_peak_rss_mb": 103
+      }
+    ]
+  },
+  "comparacao_api": {
+    "baseline": {
+      "tg_tps_curto": 18.172293219815145,
+      "pp_tps_1500": 59.08387840476452,
+      "ttft_1500_s": 22.834801733333126,
+      "ttft_prefixo_frio_s": 51.55778339999961,
+      "ttft_prefixo_cache_s": 0.6509683000003861,
+      "lat_p50_s": 0.5456790999996883,
+      "lat_p95_s": 0.5854271399995923,
+      "ram_priv_mb_repouso": 3578,
+      "ram_priv_mb_final": 5726,
+      "ctx_500_tokens": 831,
+      "ctx_500_pp_tps": 61.744338027850155,
+      "ctx_500_acerto": 1.0,
+      "ctx_500_ram_priv_mb": 10591,
+      "ctx_2000_tokens": 3105,
+      "ctx_2000_pp_tps": 43.571716624293884,
+      "ctx_2000_acerto": 1.0,
+      "ctx_2000_ram_priv_mb": 11258,
+      "ctx_5500_tokens": 8407,
+      "ctx_5500_pp_tps": 31.48139400199089,
+      "ctx_5500_acerto": 1.0,
+      "ctx_5500_ram_priv_mb": 11939
+    },
+    "otimizado": {
+      "tg_tps_curto": 17.03800818348703,
+      "pp_tps_1500": 63.83026546214496,
+      "ttft_1500_s": 21.186140733333257,
+      "ttft_prefixo_frio_s": 42.215943100000004,
+      "ttft_prefixo_cache_s": 0.6023839999998017,
+      "lat_p50_s": 0.5675549499992485,
+      "lat_p95_s": 0.6035507750000761,
+      "ram_priv_mb_repouso": 3264,
+      "ram_priv_mb_final": 5377,
+      "ctx_500_tokens": 831,
+      "ctx_500_pp_tps": 63.329506935630135,
+      "ctx_500_acerto": 1.0,
+      "ctx_500_ram_priv_mb": 5431,
+      "ctx_2000_tokens": 3105,
+      "ctx_2000_pp_tps": 60.749457062021435,
+      "ctx_2000_acerto": 1.0,
+      "ctx_2000_ram_priv_mb": 5420,
+      "ctx_5500_tokens": 8407,
+      "ctx_5500_pp_tps": 49.11831030589878,
+      "ctx_5500_acerto": 1.0,
+      "ctx_5500_ram_priv_mb": 5257
+    }
+  }
+}

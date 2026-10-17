@@ -1,0 +1,19 @@
+{
+  "harness": "claude",
+  "test": "t1",
+  "label": "fix-adaptador",
+  "ok": true,
+  "timed_out": false,
+  "exit_code": 0,
+  "wall_s": 733.4,
+  "model_calls": 10,
+  "prompt_tokens_processed": 10361,
+  "prompt_time_s": 395.5,
+  "gen_tokens": 3170,
+  "cancelled": 0,
+  "tool_events": 9,
+  "harness_peak_rss_mb": 207,
+  "check": "T1_OK\n",
+  "workdir": "<USER_DIR>\\Downloads\\LLM_Financeiro_WhatsApp\\bonsai\\auditoria\\agent-tests\\runs\\claude_t1_fix-adaptador_20261017-130510",
+  "stream_log": "<USER_DIR>\\Downloads\\LLM_Financeiro_WhatsApp\\bonsai\\auditoria\\agent-tests\\runs\\claude_t1_fix-adaptador_20261017-130510.stream.jsonl"
+}

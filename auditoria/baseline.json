@@ -1,0 +1,398 @@
+{
+  "data": "2026-10-17",
+  "servidor": "-c 262144 KV q4_0 -t 6 -tb 8 -b 256 -ub 128 cache-ram 8192(padrao) +mmproj",
+  "amostragem": "temp 0.7 top_p 0.8 presence 1.5",
+  "desempenho_api": {
+    "tg_tps_curto": 18.172293219815145,
+    "pp_tps_1500": 59.08387840476452,
+    "ttft_1500_s": 22.834801733333126,
+    "ttft_prefixo_frio_s": 51.55778339999961,
+    "ttft_prefixo_cache_s": 0.6509683000003861,
+    "lat_p50_s": 0.5456790999996883,
+    "lat_p95_s": 0.5854271399995923,
+    "ram_priv_mb_repouso": 3578,
+    "ram_priv_mb_final": 5726,
+    "ctx_500_tokens": 831,
+    "ctx_500_pp_tps": 61.744338027850155,
+    "ctx_500_acerto": 1.0,
+    "ctx_500_ram_priv_mb": 10591,
+    "ctx_2000_tokens": 3105,
+    "ctx_2000_pp_tps": 43.571716624293884,
+    "ctx_2000_acerto": 1.0,
+    "ctx_2000_ram_priv_mb": 11258,
+    "ctx_5500_tokens": 8407,
+    "ctx_5500_pp_tps": 31.48139400199089,
+    "ctx_5500_acerto": 1.0,
+    "ctx_5500_ram_priv_mb": 11939
+  },
+  "cognitivo": {
+    "score": 0.5625,
+    "perfil": "padrao",
+    "por_tarefa": {
+      "logica_ordem": 1.0,
+      "logica_cavaleiros": 1.0,
+      "mat_mult": 0.0,
+      "mat_troco": 1.0,
+      "mat_primos": 0.0,
+      "multietapa_datas": 0.0,
+      "instrucoes_formato": 1.0,
+      "json_estrito": 1.0,
+      "py_palindromo": 0.5,
+      "py_intervalos": 0.0,
+      "js_snake": 0.0,
+      "debug_busca": 1.0,
+      "refatoracao": 0.0,
+      "leitura_arquivo": 1.0,
+      "analise_projeto": 1.0,
+      "planejamento": 0.5
+    }
+  },
+  "tool_calling": {
+    "score": 0.9,
+    "perfil": "padrao",
+    "resultados": [
+      {
+        "task": "t1_leitura_simples",
+        "rep": 0,
+        "ok": true,
+        "iter": 3,
+        "calls": 2,
+        "bad_args": 0,
+        "dup_calls": 0,
+        "leaked_text_call": 0,
+        "wall_s": 13.8
+      },
+      {
+        "task": "t1_leitura_simples",
+        "rep": 1,
+        "ok": true,
+        "iter": 3,
+        "calls": 2,
+        "bad_args": 0,
+        "dup_calls": 0,
+        "leaked_text_call": 0,
+        "wall_s": 8.0
+      },
+      {
+        "task": "t2_sequencial",
+        "rep": 0,
+        "ok": false,
+        "iter": 8,
+        "calls": 8,
+        "bad_args": 0,
+        "dup_calls": 2,
+        "leaked_text_call": 0,
+        "wall_s": 25.3
+      },
+      {
+        "task": "t2_sequencial",
+        "rep": 1,
+        "ok": true,
+        "iter": 8,
+        "calls": 7,
+        "bad_args": 0,
+        "dup_calls": 1,
+        "leaked_text_call": 0,
+        "wall_s": 20.3
+      },
+      {
+        "task": "t3_multiplas",
+        "rep": 0,
+        "ok": true,
+        "iter": 3,
+        "calls": 4,
+        "bad_args": 0,
+        "dup_calls": 0,
+        "leaked_text_call": 0,
+        "wall_s": 11.0
+      },
+      {
+        "task": "t3_multiplas",
+        "rep": 1,
+        "ok": true,
+        "iter": 3,
+        "calls": 4,
+        "bad_args": 0,
+        "dup_calls": 0,
+        "leaked_text_call": 0,
+        "wall_s": 10.7
+      },
+      {
+        "task": "t4_recuperacao_erro",
+        "rep": 0,
+        "ok": true,
+        "iter": 5,
+        "calls": 4,
+        "bad_args": 0,
+        "dup_calls": 0,
+        "leaked_text_call": 0,
+        "wall_s": 13.6
+      },
+      {
+        "task": "t4_recuperacao_erro",
+        "rep": 1,
+        "ok": true,
+        "iter": 5,
+        "calls": 4,
+        "bad_args": 0,
+        "dup_calls": 0,
+        "leaked_text_call": 0,
+        "wall_s": 11.6
+      },
+      {
+        "task": "t5_codigo_executado",
+        "rep": 0,
+        "ok": true,
+        "iter": 3,
+        "calls": 2,
+        "bad_args": 0,
+        "dup_calls": 0,
+        "leaked_text_call": 0,
+        "wall_s": 13.5
+      },
+      {
+        "task": "t5_codigo_executado",
+        "rep": 1,
+        "ok": true,
+        "iter": 3,
+        "calls": 2,
+        "bad_args": 0,
+        "dup_calls": 0,
+        "leaked_text_call": 0,
+        "wall_s": 12.1
+      }
+    ]
+  },
+  "contexto": [
+    {
+      "palavras": 500,
+      "posicao": 0.1,
+      "prompt_tokens": 831,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 14.7,
+      "pp_tps": 60.49243902747958,
+      "tg_tps": 16.59895675556791,
+      "mem": {
+        "free_mb": 1800,
+        "cpu_s": 2476.828125,
+        "priv_mb": 10173,
+        "ws_mb": 4609
+      },
+      "resposta": "OPALA-9629\nBONSAI"
+    },
+    {
+      "palavras": 500,
+      "posicao": 0.5,
+      "prompt_tokens": 831,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 14.2,
+      "pp_tps": 61.580228700521566,
+      "tg_tps": 17.86533113391257,
+      "mem": {
+        "free_mb": 2382,
+        "cpu_s": 2559.453125,
+        "priv_mb": 10382,
+        "ws_mb": 4818
+      },
+      "resposta": "JADE-2780\nBONSAI"
+    },
+    {
+      "palavras": 500,
+      "posicao": 0.9,
+      "prompt_tokens": 832,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 14.0,
+      "pp_tps": 63.16034635554933,
+      "tg_tps": 16.865420967934618,
+      "mem": {
+        "free_mb": 2164,
+        "cpu_s": 2643.09375,
+        "priv_mb": 10591,
+        "ws_mb": 5026
+      },
+      "resposta": "JADE-6461\nBONSAI"
+    },
+    {
+      "palavras": 2000,
+      "posicao": 0.1,
+      "prompt_tokens": 3105,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 73.4,
+      "pp_tps": 42.83490004451933,
+      "tg_tps": 14.749117511135584,
+      "mem": {
+        "free_mb": 978,
+        "cpu_s": 3018.59375,
+        "priv_mb": 10801,
+        "ws_mb": 4997
+      },
+      "resposta": "OPALA-1812\nBONSAI"
+    },
+    {
+      "palavras": 2000,
+      "posicao": 0.5,
+      "prompt_tokens": 3108,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 71.9,
+      "pp_tps": 43.885200269716066,
+      "tg_tps": 11.348902135579658,
+      "mem": {
+        "free_mb": 1929,
+        "cpu_s": 3414.953125,
+        "priv_mb": 11029,
+        "ws_mb": 4505
+      },
+      "resposta": "ONIX-4740\nBONSAI"
+    },
+    {
+      "palavras": 2000,
+      "posicao": 0.9,
+      "prompt_tokens": 3107,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 71.7,
+      "pp_tps": 43.99504955864625,
+      "tg_tps": 12.139396692216723,
+      "mem": {
+        "free_mb": 1842,
+        "cpu_s": 3770.453125,
+        "priv_mb": 11258,
+        "ws_mb": 4734
+      },
+      "resposta": "JADE-1200\nBONSAI"
+    },
+    {
+      "palavras": 5500,
+      "posicao": 0.1,
+      "prompt_tokens": 8407,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 274.2,
+      "pp_tps": 30.80971925815136,
+      "tg_tps": 10.770023544928396,
+      "mem": {
+        "free_mb": 1883,
+        "cpu_s": 5287.03125,
+        "priv_mb": 11488,
+        "ws_mb": 4109
+      },
+      "resposta": "RUBI-3177\nBONSAI"
+    },
+    {
+      "palavras": 5500,
+      "posicao": 0.5,
+      "prompt_tokens": 8426,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 268.9,
+      "pp_tps": 31.520594045210622,
+      "tg_tps": 8.465492698186951,
+      "mem": {
+        "free_mb": 1441,
+        "cpu_s": 6841.671875,
+        "priv_mb": 11764,
+        "ws_mb": 4138
+      },
+      "resposta": "RUBI-2277\nBONSAI"
+    },
+    {
+      "palavras": 5500,
+      "posicao": 0.9,
+      "prompt_tokens": 8478,
+      "acertou": true,
+      "seguiu_instrucao_antiga": true,
+      "wall_s": 265.2,
+      "pp_tps": 32.11386870261069,
+      "tg_tps": 10.524718617262469,
+      "mem": {
+        "free_mb": 2603,
+        "cpu_s": 8382.453125,
+        "priv_mb": 11939,
+        "ws_mb": 3066
+      },
+      "resposta": "JADE-2522\nBONSAI"
+    }
+  ],
+  "divergencia_cache": [
+    {
+      "req": 0,
+      "prompt_total": 3774,
+      "cache_n": 0,
+      "prompt_n": 3774,
+      "wall_s": 85.4
+    },
+    {
+      "req": 1,
+      "prompt_total": 3774,
+      "cache_n": 3599,
+      "prompt_n": 175,
+      "wall_s": 5.1
+    },
+    {
+      "req": 2,
+      "prompt_total": 3774,
+      "cache_n": 3599,
+      "prompt_n": 175,
+      "wall_s": 5.0
+    }
+  ],
+  "agentes": [
+    {
+      "harness": "claude",
+      "test": "t1",
+      "label": "baseline",
+      "ok": true,
+      "timed_out": false,
+      "wall_s": 701.1,
+      "model_calls": 4,
+      "prompt_tokens_processed": 22720,
+      "prompt_time_s": 622.8,
+      "gen_tokens": 832,
+      "harness_peak_rss_mb": 199
+    },
+    {
+      "harness": "hermes",
+      "test": "t1",
+      "label": "baseline",
+      "ok": true,
+      "timed_out": false,
+      "wall_s": 208.9,
+      "model_calls": 4,
+      "prompt_tokens_processed": 5362,
+      "prompt_time_s": 135.1,
+      "gen_tokens": 502,
+      "harness_peak_rss_mb": 40
+    },
+    {
+      "harness": "pi",
+      "test": "t1",
+      "label": "baseline",
+      "ok": true,
+      "timed_out": false,
+      "wall_s": 89.1,
+      "model_calls": 4,
+      "prompt_tokens_processed": 2070,
+      "prompt_time_s": 41.5,
+      "gen_tokens": 696,
+      "harness_peak_rss_mb": 91
+    },
+    {
+      "harness": "claude",
+      "test": "t1",
+      "label": "fix-adaptador",
+      "ok": true,
+      "timed_out": false,
+      "wall_s": 733.4,
+      "model_calls": 10,
+      "prompt_tokens_processed": 10361,
+      "prompt_time_s": 395.5,
+      "gen_tokens": 3170,
+      "harness_peak_rss_mb": 207
+    }
+  ]
+}

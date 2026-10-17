@@ -1,0 +1,26 @@
+{
+  "label": "baseline",
+  "results": [
+    {
+      "req": 0,
+      "prompt_total": 3774,
+      "cache_n": 0,
+      "prompt_n": 3774,
+      "wall_s": 85.4
+    },
+    {
+      "req": 1,
+      "prompt_total": 3774,
+      "cache_n": 3599,
+      "prompt_n": 175,
+      "wall_s": 5.1
+    },
+    {
+      "req": 2,
+      "prompt_total": 3774,
+      "cache_n": 3599,
+      "prompt_n": 175,
+      "wall_s": 5.0
+    }
+  ]
+}

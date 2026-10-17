@@ -1,0 +1,19 @@
+{
+  "harness": "pi",
+  "test": "t2",
+  "label": "otimizado",
+  "ok": true,
+  "timed_out": false,
+  "exit_code": 0,
+  "wall_s": 551.2,
+  "model_calls": 26,
+  "prompt_tokens_processed": 4701,
+  "prompt_time_s": 101.0,
+  "gen_tokens": 5319,
+  "cancelled": 0,
+  "tool_events": 217,
+  "harness_peak_rss_mb": 103,
+  "check": "T2_OK\n",
+  "workdir": "<USER_DIR>\\Downloads\\LLM_Financeiro_WhatsApp\\bonsai\\auditoria\\agent-tests\\runs\\pi_t2_otimizado_20261017-141430",
+  "stream_log": "<USER_DIR>\\Downloads\\LLM_Financeiro_WhatsApp\\bonsai\\auditoria\\agent-tests\\runs\\pi_t2_otimizado_20261017-141430.stream.jsonl"
+}

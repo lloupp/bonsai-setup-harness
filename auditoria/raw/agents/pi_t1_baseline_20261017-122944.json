@@ -1,0 +1,19 @@
+{
+  "harness": "pi",
+  "test": "t1",
+  "label": "baseline",
+  "ok": true,
+  "timed_out": false,
+  "exit_code": 0,
+  "wall_s": 89.1,
+  "model_calls": 4,
+  "prompt_tokens_processed": 2070,
+  "prompt_time_s": 41.5,
+  "gen_tokens": 696,
+  "cancelled": 0,
+  "tool_events": 24,
+  "harness_peak_rss_mb": 91,
+  "check": "T1_OK\n",
+  "workdir": "<USER_DIR>\\Downloads\\LLM_Financeiro_WhatsApp\\bonsai\\auditoria\\agent-tests\\runs\\pi_t1_baseline_20261017-122944",
+  "stream_log": "<USER_DIR>\\Downloads\\LLM_Financeiro_WhatsApp\\bonsai\\auditoria\\agent-tests\\runs\\pi_t1_baseline_20261017-122944.stream.jsonl"
+}

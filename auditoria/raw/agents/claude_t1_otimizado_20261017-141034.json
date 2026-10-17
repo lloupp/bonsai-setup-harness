@@ -1,0 +1,19 @@
+{
+  "harness": "claude",
+  "test": "t1",
+  "label": "otimizado",
+  "ok": true,
+  "timed_out": false,
+  "exit_code": 0,
+  "wall_s": 234.9,
+  "model_calls": 5,
+  "prompt_tokens_processed": 6735,
+  "prompt_time_s": 124.4,
+  "gen_tokens": 1298,
+  "cancelled": 0,
+  "tool_events": 4,
+  "harness_peak_rss_mb": 188,
+  "check": "T1_OK\n",
+  "workdir": "<USER_DIR>\\Downloads\\LLM_Financeiro_WhatsApp\\bonsai\\auditoria\\agent-tests\\runs\\claude_t1_otimizado_20261017-141034",
+  "stream_log": "<USER_DIR>\\Downloads\\LLM_Financeiro_WhatsApp\\bonsai\\auditoria\\agent-tests\\runs\\claude_t1_otimizado_20261017-141034.stream.jsonl"
+}

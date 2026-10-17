@@ -1,0 +1,210 @@
+<!doctype html><html lang='pt-BR'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Relatório Bonsai</title><style>:root{--bg:#fbfaf7;--fg:#1f2328;--muted:#59636e;--line:#d8dee4;--head:#f1efe9;--accent:#2f6f4f;--code:#f3f2ee}
+@media (prefers-color-scheme:dark){:root{--bg:#161a1d;--fg:#e6edf3;--muted:#9aa4ad;--line:#30363d;--head:#1f252b;--accent:#7bc49b;--code:#1f252b}}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;max-width:980px;margin:0 auto;padding:24px 16px}
+h1{color:var(--accent);line-height:1.25}h2{border-bottom:1px solid var(--line);padding-bottom:4px;margin-top:2em}
+table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;margin:1em 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}th{background:var(--head)}
+code,pre{background:var(--code);border-radius:4px;font-family:ui-monospace,Consolas,monospace;font-size:13px}code{padding:1px 4px}
+pre{padding:12px;overflow-x:auto}hr{border:0;border-top:1px solid var(--line)}</style></head><body><h1>Bonsai local — manual simples</h1>
+<p>Este pacote roda o modelo de IA <strong>Bonsai 2 (4B ou 2B)</strong> no seu computador, sem internet e sem conta paga, e o conecta a três agentes de programação: <strong>Pi</strong>, <strong>Hermes</strong> e <strong>Claude Code</strong>.</p>
+<p>Tudo acontece na sua máquina. O servidor só aceita conexões do próprio computador (<code>127.0.0.1</code>).</p>
+<hr />
+<h2>1. O que você precisa</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Windows 10/11 x64</th>
+<th>Linux x64 (Ubuntu/Mint/Debian)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAM</td>
+<td>8 GB no mínimo; 16 GB recomendados</td>
+<td>igual</td>
+</tr>
+<tr>
+<td>Disco</td>
+<td>~5 GB livres</td>
+<td>igual</td>
+</tr>
+<tr>
+<td>Programas</td>
+<td><strong>Node.js 20+</strong> (para Pi, Claude Code, gateway e painel)</td>
+<td><code>curl</code>, <code>tar</code>, <code>sha256sum</code> (já vêm), <strong>Node.js 20+</strong></td>
+</tr>
+<tr>
+<td>Placa de vídeo</td>
+<td>Não precisa (roda na CPU)</td>
+<td>igual</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. Copiar do pendrive</h2>
+<p>Copie a pasta inteira <code>E:\Bonsai</code> para o disco do computador (ex.: <code>C:\Bonsai</code> ou <code>~/Bonsai</code>).</p>
+<blockquote>
+<p>Rodar direto do pendrive funciona, mas é bem mais lento para carregar.</p>
+</blockquote>
+<hr />
+<h2>3. Windows — usar</h2>
+<p>Abra a pasta e dê <strong>dois cliques</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Quero…</th>
+<th>Clique em</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ligar o modelo e conversar no navegador</td>
+<td><code>iniciar-bonsai.cmd</code> → abre http://127.0.0.1:8080</td>
+</tr>
+<tr>
+<td>Agente <strong>Pi</strong> (mais rápido e leve)</td>
+<td><code>iniciar-pi-bonsai.cmd</code></td>
+</tr>
+<tr>
+<td>Agente <strong>Hermes</strong></td>
+<td><code>iniciar-hermes-bonsai.cmd</code></td>
+</tr>
+<tr>
+<td>Agente <strong>Claude Code</strong></td>
+<td><code>iniciar-claude-bonsai.cmd</code></td>
+</tr>
+<tr>
+<td>Painel de monitoramento</td>
+<td><code>iniciar-monitor.cmd</code> → http://127.0.0.1:8090</td>
+</tr>
+<tr>
+<td>Desligar o modelo</td>
+<td><code>parar-bonsai.cmd</code></td>
+</tr>
+</tbody>
+</table>
+<p>Os agentes ligam o modelo sozinhos, se ele estiver desligado.</p>
+<p><strong>Primeira vez em outro PC:</strong> o Hermes precisa recriar o ambiente Python dele. Abra o PowerShell na pasta e rode, uma única vez (precisa de internet):</p>
+<pre><code class="language-powershell">powershell -ExecutionPolicy Bypass -File .\preparar-hermes.ps1
+</code></pre>
+<p>O Claude Code precisa estar instalado no PC (instalador oficial: https://code.claude.com/docs). Pi e Hermes já vão na pasta.</p>
+<h3>Opções úteis (PowerShell, na pasta)</h3>
+<pre><code class="language-powershell">.\iniciar-bonsai.ps1 -Modelo 2B           # modelo menor e mais rápido, porém menos capaz
+.\iniciar-bonsai.ps1 -SemVisao            # economiza ~0,4 GB de RAM (sem leitura de imagens)
+.\iniciar-bonsai.ps1 -Perfil original     # volta exatamente à configuração antiga
+.\iniciar-claude-bonsai.ps1 -Enxuto       # Claude Code com 6 ferramentas: 1ª resposta ~4x mais rápida
+.\iniciar-pi-bonsai.ps1 -Pasta 'C:\meu\projeto'   # trabalhar em outra pasta
+</code></pre>
+<p>Antes de trocar de modelo ou perfil, rode <code>parar-bonsai.cmd</code>.</p>
+<hr />
+<h2>4. Linux — usar</h2>
+<p>No terminal, dentro da pasta:</p>
+<pre><code class="language-bash">chmod +x linux/*.sh
+./linux/setup-linux.sh --com-2b     # uma vez: confere o runtime e os modelos (SHA256)
+./linux/iniciar-bonsai.sh           # liga o modelo → http://127.0.0.1:8080
+</code></pre>
+<p>O runtime Linux e os modelos já vão no pendrive. O setup só baixa algo se estiver faltando.</p>
+<table>
+<thead>
+<tr>
+<th>Quero…</th>
+<th>Comando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agente Pi</td>
+<td><code>./linux/iniciar-pi-bonsai.sh ~/meu-projeto</code> (na 1ª vez roda <code>npm ci</code>)</td>
+</tr>
+<tr>
+<td>Agente Hermes</td>
+<td><code>./linux/preparar-hermes.sh</code> (uma vez, precisa de internet) e depois <code>./linux/iniciar-hermes-bonsai.sh ~/meu-projeto</code></td>
+</tr>
+<tr>
+<td>Agente Claude Code</td>
+<td>instale o Claude Code oficial e depois <code>./linux/iniciar-claude-bonsai.sh ~/meu-projeto</code></td>
+</tr>
+<tr>
+<td>Modelo 2B</td>
+<td><code>./linux/iniciar-bonsai.sh --modelo 2B</code></td>
+</tr>
+<tr>
+<td>Configuração antiga</td>
+<td><code>./linux/iniciar-bonsai.sh --perfil original</code></td>
+</tr>
+<tr>
+<td>Desligar</td>
+<td><code>./linux/parar-bonsai.sh</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Em outra CPU, você pode ajustar as threads: <code>BONSAI_THREADS=4 BONSAI_THREADS_BATCH=6 ./linux/iniciar-bonsai.sh</code>.</p>
+</blockquote>
+<hr />
+<h2>5. Usar com outros programas (API)</h2>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>URL base (OpenAI)</td>
+<td><code>http://127.0.0.1:8080/v1</code></td>
+</tr>
+<tr>
+<td>Modelo</td>
+<td><code>bonsai-2-4b</code> (ou <code>bonsai-2-2b</code>)</td>
+</tr>
+<tr>
+<td>Chave</td>
+<td><code>local</code> (qualquer texto)</td>
+</tr>
+</tbody>
+</table>
+<p>Para melhores resultados em código e ferramentas, envie <code>temperature: 0.2</code> e <code>presence_penalty: 0</code>.</p>
+<hr />
+<h2>6. O que esperar (medido neste PC: i5-14500T, 16 GB)</h2>
+<ul>
+<li>Respostas curtas: começam em menos de 1 segundo e saem a ~18 palavras-token por segundo.</li>
+<li>Ler textos longos é a parte lenta: ~60 tokens/s em textos curtos, ~49 tokens/s com 8 mil tokens.</li>
+<li>O <strong>Pi</strong> é o agente mais rápido: tarefas simples em ~1,5 min. O Claude Code é o mais pesado.</li>
+<li>O Bonsai 4B é um modelo pequeno. Ele resolve bem tarefas pequenas e bem descritas, mas erra contas e lógica com frequência. <strong>Sempre confira o resultado.</strong></li>
+</ul>
+<p>Detalhes e números completos: <code>RELATORIO_FINAL_BONSAI.md</code> (ou <code>.html</code>).</p>
+<hr />
+<h2>7. Problemas comuns</h2>
+<table>
+<thead>
+<tr>
+<th>Sintoma</th>
+<th>Solução</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"porta 8080 ocupada"</td>
+<td>Rode <code>parar-bonsai</code> e tente de novo.</td>
+</tr>
+<tr>
+<td>Agente diz "Connection error"</td>
+<td>O gateway caiu: rode <code>iniciar-gateway.ps1</code> ou <code>./linux/iniciar-gateway.sh</code>.</td>
+</tr>
+<tr>
+<td>PC muito lento ou sem memória</td>
+<td>Use <code>-SemVisao</code> ou <code>-Modelo 2B</code>; feche outros programas.</td>
+</tr>
+<tr>
+<td>Claude Code demora muitos minutos no 1º passo</td>
+<td>Use <code>-Enxuto</code>.</td>
+</tr>
+<tr>
+<td>Ver o que aconteceu</td>
+<td>Leia <code>logs/server.err.log</code>.</td>
+</tr>
+</tbody>
+</table></body></html>
