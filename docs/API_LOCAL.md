@@ -51,10 +51,10 @@ O modelo ativo e definido no inicializador do servidor, mas o cliente de benchma
 precisa usar o mesmo alias. No Windows:
 
 ```powershell
-.\\parar-bonsai.ps1
-.\\iniciar-bonsai.ps1 -Modelo 2B -SemNavegador
+.\parar-bonsai.ps1
+.\iniciar-bonsai.ps1 -Modelo 2B -SemNavegador
 $env:BONSAI_MODEL = 'bonsai-2-2b'
-python auditoria\\scripts\\bench_perf.py 2b
+python auditoria\scripts\bench_perf.py 2b
 ```
 
 No Linux:
