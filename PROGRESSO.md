@@ -29,7 +29,7 @@ Testes interrompidos a pedido do usuário para iniciar as cópias (pendrive e Gi
 | T5 subagentes (Hermes `delegate_task`, Claude `Task`) | NÃO TESTADO; preparado como `t2sub` | `$env:HERMES_TOOLSETS='terminal,file,delegation'; python run_agent_test.py hermes t2sub sub 2400` / `$env:CLAUDE_TOOLS='Read,Write,Edit,Bash,Glob,Grep,Task'; python run_agent_test.py claude t2sub sub 2400` |
 | Subagentes no Pi | NÃO TESTADO: não há suporte nativo, só a extensão de exemplo `examples/extensions/subagent` | Instalar a extensão num perfil de teste |
 | Repetir o benchmark final (3ª rodada da validação) | PARCIAL: o antes × depois foi medido uma vez com 3 repetições internas | `python auditoria/scripts/bench_perf.py final` e `compare.py baseline final` |
-| Benchmark do modelo 2B | NÃO TESTADO (corrigida a selecao do cliente na branch de manutencao) | `.\iniciar-bonsai.ps1 -Modelo 2B` e depois `bench_perf.py 2b` / `bench_cog.py 2b agente 2` |
+| Benchmark do modelo 2B | NÃO TESTADO (selecao do cliente corrigida nesta branch) | Veja `docs/TESTES_PENDENTES.md`; configure `BONSAI_MODEL=bonsai-2-2b` |
 | Execução em Linux real | NÃO TESTADO (sem WSL/Linux nesta máquina) | `./linux/setup-linux.sh && ./linux/iniciar-bonsai.sh` num Linux |
 | Temperatura/throttling | NÃO TESTADO (exige administrador) | Rodar HWiNFO/LibreHardwareMonitor durante `bench_perf.py` |
 | Speculative decoding (ngram) | NÃO TESTADO | `--spec-type ngram-mod` no `srv-experimento.ps1` |
