@@ -68,6 +68,16 @@ jobs:
             ./linux/parar-bonsai.sh
             echo "::endgroup::"
           done
+      - name: Bateria funcional segura - 7 casos em 2B e 4B
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap './linux/parar-bonsai.sh || true' EXIT
+          for model in 2B 4B; do
+            ./linux/iniciar-bonsai.sh --modelo "$model" --contexto 4096 --cache-ram 128 --sem-visao
+            BONSAI_MODEL="bonsai-2-${model,,}" python3 auditoria/scripts/bench_mini.py "cpu_${model,,}"
+            ./linux/parar-bonsai.sh
+          done
       - name: Resultado e logs de diagnostico
         if: always()
         uses: actions/upload-artifact@v4
@@ -75,6 +85,7 @@ jobs:
           name: bonsai-linux-smoke
           path: |
             auditoria/raw/smoke_*.json
+            auditoria/raw/mini_*.json
             logs/server.err.log
             logs/server.out.log
           if-no-files-found: warn
