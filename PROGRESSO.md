@@ -40,3 +40,10 @@ Testes interrompidos a pedido do usuário para iniciar as cópias (pendrive e Gi
 - Correcoes propostas para selecionar e verificar o modelo nos benchmarks, coletar RSS no Linux e validar opcoes/assets dos inicializadores Linux.
 - Testes offline automatizados em GitHub Actions para Python, Bash e Node. Eles nao substituem as baterias reais pendentes.
 - Comandos e limitacoes: [docs/TESTES_PENDENTES.md](docs/TESTES_PENDENTES.md).
+
+## Smoke test real no Ubuntu — 18/10/2026
+
+- **PASSOU:** runtime PrismML oficial e GGUF 2B/4B (e mmproj) baixados e SHA256 verificados pelo GitHub Actions.
+- **PASSOU:** servidores 2B e 4B iniciados em CPU no Linux Ubuntu com contexto 2048 e perfil otimizado; ambos responderam `OK` a uma requisicao real via API.
+- **NAO TESTADO AQUI:** benchmarks completos, Linux Mint no PC, Pi Agent, Hermes, Claude Code, subagentes e agent loops.
+- [Resultados e limites de interpretacao](docs/RESULTADO_LINUX_REAL_2026-10-18.md).
