@@ -41,7 +41,9 @@ Relatório completo: [RELATORIO_FINAL_BONSAI.md](RELATORIO_FINAL_BONSAI.md) ([HT
 ## Validacao e testes pendentes
 
 O pipeline GitHub Actions executa testes **offline** de Python, Bash e Node, sem baixar ou
-iniciar os modelos. Para benchmarks reais no Windows/Linux e configuracao correta do 2B,
+iniciar os modelos. A inferencia real de 2B/4B em CPU no Ubuntu passou em 18/10/2026:
+[resultado verificado](docs/RESULTADO_LINUX_REAL_2026-10-18.md).
+Para benchmarks completos no Windows/Linux e configuracao correta do 2B,
 consulte [docs/TESTES_PENDENTES.md](docs/TESTES_PENDENTES.md).
 
 Para selecionar o modelo nos benchmarks Python, ajuste `BONSAI_MODEL` para
