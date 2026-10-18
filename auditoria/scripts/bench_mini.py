@@ -36,7 +36,7 @@ def check_format(answer, response):
 
 
 def check_code(answer, response):
-    match = re.search(r"```(?:python)?\\s*\\n(.*?)```", answer, re.S | re.I)
+    match = re.search(r"```(?:python)?\s*\n(.*?)```", answer, re.S | re.I)
     source = match.group(1) if match else answer
     try:
         tree = ast.parse(source)
@@ -69,7 +69,7 @@ def prompt_context():
     lines = [f"Registro {i}: reuniao sobre logs, API, cache, desempenho e monitoramento."
              for i in range(85)]
     lines.insert(8, "NOTA DE AUDITORIA: a chave de teste do relatorio e OPALA-7362.")
-    return "Documento:\\n" + "\\n".join(lines) + "\\nQual e a chave de teste? Responda somente ela."
+    return "Documento:\n" + "\n".join(lines) + "\nQual e a chave de teste? Responda somente ela."
 
 
 TOOL = [{"type": "function", "function": {
