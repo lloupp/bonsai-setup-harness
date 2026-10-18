@@ -29,7 +29,12 @@ if [[ $SOMENTE_LOCAL -eq 1 ]]; then BIND_HOST=127.0.0.1; fi
 model_id="bonsai-2-$(echo "$MODELO" | tr 'A-Z' 'a-z')"
 if health "$PORTA"; then
   if curl -fsS -m 2 "http://127.0.0.1:$PORTA/v1/models" | grep -Eq "\"id\"[[:space:]]*:[[:space:]]*\"$model_id\""; then
-    echo "Bonsai $MODELO ja esta rodando em http://127.0.0.1:$PORTA. Reinicie para aplicar o modo de rede caso tenha alterado a configuracao."
+    config_file="$BASE/logs/server-config.json"
+    if [[ ! -f "$config_file" ]] || ! grep -Fq "\"listenHost\":\"$BIND_HOST\"" "$config_file"; then
+      echo "Bonsai ja ativo, mas modo de rede nao corresponde (ou e desconhecido). Execute ./linux/parar-bonsai.sh e reinicie." >&2
+      exit 1
+    fi
+    echo "Bonsai $MODELO ja esta rodando em http://127.0.0.1:$PORTA (escuta $BIND_HOST)."
     exit 0
   fi
   echo "Porta $PORTA ja esta ocupada por um servidor com outro modelo." >&2
@@ -56,6 +61,8 @@ if [[ $VISAO -eq 1 ]]; then ARGS+=(--mmproj "$mmproj"); fi
 mkdir -p "$BASE/logs"
 LD_LIBRARY_PATH="$BIN_LINUX${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" nohup "$BIN_LINUX/llama-server" "${ARGS[@]}" >"$BASE/logs/server.out.log" 2>"$BASE/logs/server.err.log" &
 echo $! > "$BASE/logs/server.pid"
+printf '{"pid":%s,"model":"%s","listenHost":"%s","backend":"CPU","context":%s,"contextCache":"%s","perfil":"%s"}\n' \
+  "$!" "$model_id" "$BIND_HOST" "$CTX" "$KV" "$PERFIL" > "$BASE/logs/server-config.json"
 for _ in $(seq 1 180); do
   if health "$PORTA"; then
     echo "Bonsai 2 $MODELO pronto: http://127.0.0.1:$PORTA (perfil $PERFIL, contexto $CTX, KV $KV, escuta $BIND_HOST)"
