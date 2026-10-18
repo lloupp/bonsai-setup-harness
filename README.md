@@ -38,6 +38,23 @@ Para agentes, use `temperature 0.2` e `presence_penalty 0`. O perfil `original` 
 
 Relatório completo: [RELATORIO_FINAL_BONSAI.md](RELATORIO_FINAL_BONSAI.md) ([HTML](RELATORIO_FINAL_BONSAI.html)) · O que falta testar: [PROGRESSO.md](PROGRESSO.md)
 
+## Validacao e testes pendentes
+
+O pipeline GitHub Actions executa testes **offline** de Python, Bash e Node, sem baixar ou
+iniciar os modelos. Para benchmarks reais no Windows/Linux e configuracao correta do 2B,
+consulte [docs/TESTES_PENDENTES.md](docs/TESTES_PENDENTES.md).
+
+Para selecionar o modelo nos benchmarks Python, ajuste `BONSAI_MODEL` para
+`bonsai-2-2b` ou `bonsai-2-4b`; a bateria confirma o alias ativo em
+`/v1/models` antes de enviar a primeira solicitacao. No Linux, a memoria do processo
+e medida em RSS (`ws_mb`), nao em private commit (`priv_mb`) como no Windows;
+nao compare esses dois indicadores diretamente entre sistemas.
+
+**Limite de reproducibilidade:** os pesos e as instalacoes dos tres harnesses nao
+estao neste repositorio. Os scripts `run_agent_test.py` exigem os perfis e
+instalacoes locais descritos no relatorio. O CI nao comprova ganhos de performance
+nem executa os agentes.
+
 ## Estrutura
 
 | Pasta/arquivo | Conteúdo |
