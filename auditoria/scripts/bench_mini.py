@@ -31,8 +31,17 @@ def check_json(answer, response):
 
 
 def check_format(answer, response):
+    # Verifica TAMBEM se sao frutas, nao apenas tres linhas maiusculas.
+    # Vocabulario deliberadamente limitado: nao e um teste de conhecimento enciclopedico.
+    fruits = {"BANANA", "LARANJA", "ABACATE", "MANGA", "MELANCIA", "UVA",
+              "MELÃO", "MELAO", "PERA", "MAÇÃ", "MACA", "LIMÃO", "LIMAO",
+              "MORANGO", "CEREJA", "KIWI", "PÊSSEGO", "PESSEGO", "GOIABA",
+              "ABACAXI", "LIMA", "AMORA", "FRAMBOESA", "MARACUJÁ", "MARACUJA",
+              "CAQUI", "ACEROLA", "COCO", "TANGERINA"}
     lines = answer.strip().splitlines()
-    return len(lines) == 3 and all(x.startswith("- ") and x == x.upper() for x in lines)
+    items = [x[2:] for x in lines if x.startswith("- ")]
+    return (len(lines) == 3 and len(items) == 3 and len(set(items)) == 3
+            and all(x == x.upper() and x in fruits for x in items))
 
 
 def check_code(answer, response):
@@ -42,8 +51,14 @@ def check_code(answer, response):
         tree = ast.parse(source)
     except SyntaxError:
         return False
-    return any(isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.name == "soma_digitos"
-               for n in tree.body)
+    # Sinal minimo de tratamento de negativos sem executar codigo de origem LLM.
+    # Esta heuristica nao prova comportamento nem aceita todos os algoritmos validos.
+    functions = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "soma_digitos"]
+    return bool(functions) and any(
+        isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "abs"
+        and len(n.args) == 1 and isinstance(n.args[0], ast.Name) and n.args[0].id == "n"
+        for n in ast.walk(functions[0])
+    )
 
 
 def check_tool(answer, response):
