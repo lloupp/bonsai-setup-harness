@@ -27,7 +27,7 @@
 
 ## Falhas adicionais detectadas na revisao humana
 
-A pontuacao original e **otimista** porque dois validadores so verificavam
+Os validadores foram **endurecidos apos esta execucao** (com testes de regressao); a pontuacao abaixo e a do **script no commit testado**, nao uma medicao refeita apos as correcoes. A pontuacao original e **otimista** porque dois validadores so verificavam
 formato/sintaxe, nao comportamento:
 
 - **2B, codigo:** a funcao gerada faz `while n > 0` e nao converte `n`
@@ -65,3 +65,13 @@ Pi Agent, Hermes, Claude Code, agent loops, subagentes e o Linux Mint
 instalado no PC do usuario dependem das instalacoes/configuracoes locais,
 nao publicadas neste repositorio. Nenhum desses recursos foi validado neste
 teste. Para aprofundar, consultar `docs/TESTES_PENDENTES.md`.
+
+## Correcao dos validadores apos revisar os logs
+
+A branch de manutencao passa a rejeitar palavras que nao estejam em um
+vocabulario basico de frutas e, na checagem estatica de codigo, exige
+`abs(n)` como indicador de tratamento de negativos. Este ultimo criterio
+ainda e apenas uma **heuristica**, nao uma prova de execucao correta;
+implementacoes validas sem `abs(n)` tambem podem ser rejeitadas. Foram
+adicionados testes de regressao em `tests/test_bench_mini.py` para os erros
+vistos nas respostas. **Nao registrar nova pontuacao automatica sem rerun.**
