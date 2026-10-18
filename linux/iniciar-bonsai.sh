@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # Inicia o servidor Bonsai (mesmos perfis do iniciar-bonsai.ps1).
-# Uso: ./linux/iniciar-bonsai.sh [--perfil otimizado|original] [--modelo 4B|2B] [--contexto N] [--sem-visao] [--porta 8080]
+# Uso: ./linux/iniciar-bonsai.sh [--perfil otimizado|original] [--modelo 4B|2B] [--contexto N] [--sem-visao] [--somente-local] [--porta 8080]
 set -euo pipefail
 source "$(dirname "$0")/common.sh"
-PERFIL=otimizado; MODELO=4B; CTX=""; VISAO=1; PORTA=8080; CACHE_RAM=2048
+PERFIL=otimizado; MODELO=4B; CTX=""; VISAO=1; PORTA=8080; CACHE_RAM=2048; SOMENTE_LOCAL=0
 while [[ $# -gt 0 ]]; do
-  if [[ "$1" != "--sem-visao" && $# -lt 2 ]]; then echo "Valor ausente para $1" >&2; exit 2; fi
+  if [[ "$1" != "--sem-visao" && "$1" != "--somente-local" && $# -lt 2 ]]; then echo "Valor ausente para $1" >&2; exit 2; fi
   case "$1" in
     --perfil) PERFIL=$2; shift 2;; --modelo) MODELO=$2; shift 2;; --contexto) CTX=$2; shift 2;;
-    --sem-visao) VISAO=0; shift;; --porta) PORTA=$2; shift 2;; --cache-ram) CACHE_RAM=$2; shift 2;;
+    --sem-visao) VISAO=0; shift;; --somente-local) SOMENTE_LOCAL=1; shift;; --porta) PORTA=$2; shift 2;; --cache-ram) CACHE_RAM=$2; shift 2;;
     *) echo "Opcao desconhecida: $1" >&2; exit 2;;
   esac
 done
@@ -23,11 +23,13 @@ fi
 if [[ ! "$CACHE_RAM" =~ ^[0-9]+$ ]] || (( 10#$CACHE_RAM < 1 )); then
   echo "Cache RAM invalido: $CACHE_RAM" >&2; exit 2
 fi
+BIND_HOST=0.0.0.0
+if [[ $SOMENTE_LOCAL -eq 1 ]]; then BIND_HOST=127.0.0.1; fi
 [[ -x "$BIN_LINUX/llama-server" ]] || { echo "Execute ./linux/setup-linux.sh antes." >&2; exit 1; }
 model_id="bonsai-2-$(echo "$MODELO" | tr 'A-Z' 'a-z')"
 if health "$PORTA"; then
   if curl -fsS -m 2 "http://127.0.0.1:$PORTA/v1/models" | grep -Eq "\"id\"[[:space:]]*:[[:space:]]*\"$model_id\""; then
-    echo "Bonsai $MODELO ja esta rodando em http://127.0.0.1:$PORTA; reinicie para trocar parametros."
+    echo "Bonsai $MODELO ja esta rodando em http://127.0.0.1:$PORTA. Reinicie para aplicar o modo de rede caso tenha alterado a configuracao."
     exit 0
   fi
   echo "Porta $PORTA ja esta ocupada por um servidor com outro modelo." >&2
@@ -46,7 +48,7 @@ if [[ "$VISAO" -eq 1 ]]; then
   mmproj="$BASE/models/Ternary-Bonsai-2-$MODELO-mmproj-Q8_0.gguf"
   [[ -f "$mmproj" ]] || { echo "Projetor de visao ausente: $mmproj. Use --sem-visao ou execute o setup." >&2; exit 1; }
 fi
-ARGS=(-m "$model_file" --host 127.0.0.1 --port "$PORTA" --alias "$model_id"
+ARGS=(-m "$model_file" --host "$BIND_HOST" --port "$PORTA" --alias "$model_id"
   -ngl 0 -c "$CTX" -np 1 -t "$T" -tb "$TB" -b 256 -ub 128 --cache-type-k "$KV" --cache-type-v "$KV" -fa on --jinja
   --temp 0.7 --top-p 0.8 --top-k 20 --min-p 0 --presence-penalty 1.5 --repeat-penalty 1.0 --repeat-last-n 64
   --reasoning-budget 0 "${EXTRA[@]}")
@@ -55,7 +57,14 @@ mkdir -p "$BASE/logs"
 LD_LIBRARY_PATH="$BIN_LINUX${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" nohup "$BIN_LINUX/llama-server" "${ARGS[@]}" >"$BASE/logs/server.out.log" 2>"$BASE/logs/server.err.log" &
 echo $! > "$BASE/logs/server.pid"
 for _ in $(seq 1 180); do
-  if health "$PORTA"; then echo "Bonsai 2 $MODELO pronto: http://127.0.0.1:$PORTA (perfil $PERFIL, contexto $CTX, KV $KV)"; exit 0; fi
+  if health "$PORTA"; then
+    echo "Bonsai 2 $MODELO pronto: http://127.0.0.1:$PORTA (perfil $PERFIL, contexto $CTX, KV $KV, escuta $BIND_HOST)"
+    if [[ $SOMENTE_LOCAL -eq 0 ]]; then
+      echo "AVISO: API sem autenticacao em todas as interfaces IPv4. Restrinja a porta $PORTA a sua LAN no firewall. Nao publique na Internet." >&2
+      echo "Em outro PC: http://<IP-DO-SERVIDOR>:$PORTA/v1"
+    fi
+    exit 0
+  fi
   kill -0 "$(cat "$BASE/logs/server.pid")" 2>/dev/null || { echo "Falha ao iniciar; veja logs/server.err.log" >&2; exit 1; }
   sleep 1
 done
