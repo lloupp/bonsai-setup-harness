@@ -28,3 +28,23 @@ jobs:
         run: node --test monitor/*.test.mjs
       - name: Comparar dados ja registrados (sem reexecutar o modelo)
         run: python auditoria/scripts/compare.py baseline otimizado
+
+  windows-powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar sintaxe dos scripts PowerShell
+        shell: pwsh
+        run: |
+          $paths = @('iniciar-bonsai.ps1', 'configurar-firewall-lan.ps1')
+          foreach ($path in $paths) {
+            $tokens = $null
+            $errors = $null
+            $null = [System.Management.Automation.Language.Parser]::ParseFile(
+              (Join-Path $pwd $path), [ref]$tokens, [ref]$errors)
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error "$path -> $_" }
+              exit 1
+            }
+            Write-Host "Sintaxe OK: $path"
+          }
