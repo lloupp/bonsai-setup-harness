@@ -2,7 +2,12 @@
 
 Este pacote roda o modelo de IA **Bonsai 2 (4B ou 2B)** no seu computador, sem internet e sem conta paga, e o conecta a três agentes de programação: **Pi**, **Hermes** e **Claude Code**.
 
-Tudo acontece na sua máquina. O servidor só aceita conexões do próprio computador (`127.0.0.1`).
+O processamento acontece na máquina que hospeda o Bonsai. Por padrão,
+o servidor aceita conexões da **rede local** (`0.0.0.0:8080`), sem
+autenticação: restrinja o acesso no firewall a dispositivos confiáveis.
+O próprio PC continua acessando `127.0.0.1`. Para desativar acesso
+pela rede, use `-SomenteLocal` no Windows ou `--somente-local` no Linux.
+Veja [instruções de rede e firewall](docs/REDE_LOCAL.md).
 
 ---
 
@@ -53,6 +58,7 @@ O Claude Code precisa estar instalado no PC (instalador oficial: https://code.cl
 ```powershell
 .\iniciar-bonsai.ps1 -Modelo 2B           # modelo menor e mais rápido, porém menos capaz
 .\iniciar-bonsai.ps1 -SemVisao            # economiza ~0,4 GB de RAM (sem leitura de imagens)
+.\iniciar-bonsai.ps1 -SomenteLocal        # sem acesso remoto pela rede
 .\iniciar-bonsai.ps1 -Perfil original     # volta exatamente à configuração antiga
 .\iniciar-claude-bonsai.ps1 -Enxuto       # Claude Code com 6 ferramentas: 1ª resposta ~4x mais rápida
 .\iniciar-pi-bonsai.ps1 -Pasta 'C:\meu\projeto'   # trabalhar em outra pasta
@@ -80,6 +86,7 @@ O runtime Linux e os modelos já vão no pendrive. O setup só baixa algo se est
 | Agente Hermes | `./linux/preparar-hermes.sh` (uma vez, precisa de internet) e depois `./linux/iniciar-hermes-bonsai.sh ~/meu-projeto` |
 | Agente Claude Code | instale o Claude Code oficial e depois `./linux/iniciar-claude-bonsai.sh ~/meu-projeto` |
 | Modelo 2B | `./linux/iniciar-bonsai.sh --modelo 2B` |
+| Somente PC local | `./linux/iniciar-bonsai.sh --somente-local` |
 | Configuração antiga | `./linux/iniciar-bonsai.sh --perfil original` |
 | Desligar | `./linux/parar-bonsai.sh` |
 
@@ -94,6 +101,12 @@ O runtime Linux e os modelos já vão no pendrive. O setup só baixa algo se est
 | URL base (OpenAI) | `http://127.0.0.1:8080/v1` |
 | Modelo | `bonsai-2-4b` (ou `bonsai-2-2b`) |
 | Chave | `local` (qualquer texto) |
+
+Em outro PC, troque `127.0.0.1` pelo **IP privado do servidor**
+(ex.: `192.168.1.100`) e configure o firewall. No Windows, execute
+`.\configurar-firewall-lan.ps1` uma vez como Administrador após instalar
+o runtime. Essa regra permite TCP/8080 somente para `LocalSubnet`
+em rede `Privada`. Consulte [docs/REDE_LOCAL.md](docs/REDE_LOCAL.md).
 
 Para melhores resultados em código e ferramentas, envie `temperature: 0.2` e `presence_penalty: 0`.
 
