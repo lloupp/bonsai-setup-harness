@@ -7,7 +7,7 @@ th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-ali
 code,pre{background:var(--code);border-radius:4px;font-family:ui-monospace,Consolas,monospace;font-size:13px}code{padding:1px 4px}
 pre{padding:12px;overflow-x:auto}hr{border:0;border-top:1px solid var(--line)}</style></head><body><h1>Bonsai local — manual simples</h1>
 <p>Este pacote roda o modelo de IA <strong>Bonsai 2 (4B ou 2B)</strong> no seu computador, sem internet e sem conta paga, e o conecta a três agentes de programação: <strong>Pi</strong>, <strong>Hermes</strong> e <strong>Claude Code</strong>.</p>
-<p>Tudo acontece na sua máquina. O servidor só aceita conexões do próprio computador (<code>127.0.0.1</code>).</p>
+<p>O processamento acontece no computador que hospeda o Bonsai. Por padrão, a API aceita conexões da rede local em <code>0.0.0.0:8080</code> (no próprio PC, use <code>127.0.0.1:8080</code>). Restrinja o firewall a dispositivos confiáveis. Para desativar o acesso remoto, use <code>-SomenteLocal</code> no Windows ou <code>--somente-local</code> no Linux. Consulte <a href="docs/REDE_LOCAL.md">docs/REDE_LOCAL.md</a>.</p>
 <hr />
 <h2>1. O que você precisa</h2>
 <table>
