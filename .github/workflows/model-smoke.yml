@@ -6,6 +6,7 @@ on:
       - fix/benchmarks-linux-2b-ci-20261018
     paths:
       - .github/workflows/model-smoke.yml
+      - linux/iniciar-bonsai.sh
   workflow_dispatch:
 
 permissions:
@@ -29,6 +30,26 @@ jobs:
           chmod +x linux/*.sh
           ./linux/setup-linux.sh --com-2b
           ls -lh models/ bin-linux/llama-server
+      - name: Validar acesso LAN e bloqueio com --somente-local
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap './linux/parar-bonsai.sh || true' EXIT
+          addr=$(hostname -I | awk '{print $1}')
+          [[ -n "$addr" ]] || { echo 'Sem endereco IPv4 nao-loopback no runner.' >&2; exit 1; }
+          ./linux/iniciar-bonsai.sh --modelo 2B --contexto 2048 --cache-ram 128 --sem-visao
+          curl --noproxy '*' --connect-timeout 5 -fsS "http://$addr:8080/health"
+          curl --noproxy '*' --connect-timeout 5 -fsS "http://127.0.0.1:8080/health"
+          echo "LAN: requisições aceitas no endereco $addr e em localhost."
+          ./linux/parar-bonsai.sh
+          ./linux/iniciar-bonsai.sh --modelo 2B --contexto 2048 --cache-ram 128 --sem-visao --somente-local
+          curl --noproxy '*' --connect-timeout 5 -fsS "http://127.0.0.1:8080/health"
+          if curl --noproxy '*' --connect-timeout 3 -m 5 -fsS "http://$addr:8080/health"; then
+            echo 'ERRO: --somente-local permitiu acesso pela interface de rede.' >&2
+            exit 1
+          fi
+          echo "--somente-local: interface de rede recusou acesso como esperado."
+          ./linux/parar-bonsai.sh
       - name: Testar inferencia real em CPU - 2B e 4B
         shell: bash
         run: |
