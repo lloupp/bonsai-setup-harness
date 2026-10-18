@@ -1,10 +1,17 @@
 # Bonsai como servidor para outros harnesses
 
-O Bonsai roda separado dos clientes. Inicie com `iniciar-bonsai.cmd` e deixe esse servidor ativo. Depois abra qualquer cliente/harness que aceite a API OpenAI Chat Completions e modelos personalizados.
+O Bonsai roda separado dos clientes. Por padrão, o servidor escuta
+em `0.0.0.0:8080`, aceitando conexões da LAN; clientes no próprio PC
+continuam acessando `127.0.0.1:8080`. Em outros computadores, use o IP
+privado do servidor, por exemplo `http://192.168.1.100:8080/v1`.
+A chave `local` **não implementa autenticação**. Restrinja a porta
+no firewall somente para a rede privada confiável, conforme
+[REDE_LOCAL.md](REDE_LOCAL.md).
 
 | Campo | Valor |
 |---|---|
-| URL base OpenAI | `http://127.0.0.1:8080/v1` |
+| URL base OpenAI (PC servidor) | `http://127.0.0.1:8080/v1` |
+| URL base OpenAI (outro PC) | `http://<IP-PRIVADO>:8080/v1` |
 | Modelo | `bonsai-2-4b` |
 | Chave, se o cliente exigir | `local` |
 | Chat | `POST /v1/chat/completions` |
@@ -42,7 +49,7 @@ print(response.choices[0].message.content)
 
 O perfil `otimizado` inicia com contexto padrao de 65536 tokens (o perfil `original` usa 262144). A entrada, o historico, as descricoes de ferramentas e a resposta compartilham essa janela. Consulte `/props` ou o painel para o limite efetivamente ativo. Apenas uma geracao e atendida por vez; outros clientes aguardam na fila. Prompts grandes, como o prompt completo do Claude Code, podem levar varios minutos nesta CPU.
 
-`127.0.0.1` permite uso neste computador. O servidor nao foi exposto para outros computadores da rede.
+Por padrão, o servidor também recebe requisições de outros dispositivos da LAN, sujeito ao firewall. O gateway (8083), o painel (8090) e o adaptador Anthropic local (8082) **não são automaticamente expostos** para a rede.
 
 
 ## Selecao do 2B nos benchmarks
