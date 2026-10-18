@@ -37,7 +37,7 @@ try {
             } catch { }
         }
         if ($hostAtual -ne $enderecoEscuta) {
-            Write-Warning "Servidor ja ativo com escuta desconhecida ou diferente da solicitada. Reinicie com parar-bonsai.ps1 para aplicar o modo de rede."
+            throw 'Servidor ja ativo com escuta desconhecida ou diferente: execute parar-bonsai.ps1 e inicie novamente.'
         }
         Write-Host "Bonsai ja esta rodando em $url; contexto ativo: $($props.default_generation_settings.n_ctx). Para alterar, execute parar-bonsai.ps1 antes."
         if (-not $SemNavegador) { Start-Process $url }
@@ -45,7 +45,7 @@ try {
     }
     throw "A porta $Porta esta ocupada por outro servidor."
 } catch {
-    if ($_.Exception.Message -like '*ocupada*') { throw }
+    if ($_.Exception.Message -like '*ocupada*' -or $_.Exception.Message -like '*escuta desconhecida ou diferente*') { throw }
 }
 $serverArgs = @(
     '-m', ('"' + (Join-Path $base "models\Ternary-Bonsai-2-$Modelo-PQ2_0.gguf") + '"'),
