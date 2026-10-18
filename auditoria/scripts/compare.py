@@ -14,7 +14,8 @@ def perf(label):
             "ttft_1500_s": m("medio_1500_frio", "ttft_s"), "ttft_prefixo_frio_s": r["agente_prefixo_3000"]["reps"][0]["ttft_s"],
             "ttft_prefixo_cache_s": st.mean(x["ttft_s"] for x in r["agente_prefixo_3000"]["reps"][1:]),
             "lat_p50_s": r["estabilidade_10"]["p50"], "lat_p95_s": r["estabilidade_10"]["p95"],
-            "ram_priv_mb_repouso": d["mem_idle"]["priv_mb"], "ram_priv_mb_final": r["estabilidade_10"]["mem_after"]["priv_mb"]}
+            "ram_priv_mb_repouso": d["mem_idle"].get("priv_mb"), "ram_priv_mb_final": r["estabilidade_10"]["mem_after"].get("priv_mb"),
+            "ram_rss_mb_repouso": d["mem_idle"].get("ws_mb"), "ram_rss_mb_final": r["estabilidade_10"]["mem_after"].get("ws_mb")}
 
 
 def ctx(label):
@@ -27,7 +28,8 @@ def ctx(label):
         out.setdefault(f"ctx_{k}_tokens", r["prompt_tokens"])
         out.setdefault(f"ctx_{k}_pp_tps", []).append(r["pp_tps"])
         out.setdefault(f"ctx_{k}_acerto", []).append(r["acertou"])
-        out[f"ctx_{k}_ram_priv_mb"] = r["mem"]["priv_mb"]
+        out[f"ctx_{k}_ram_priv_mb"] = r["mem"].get("priv_mb")
+        out[f"ctx_{k}_ram_rss_mb"] = r["mem"].get("ws_mb")
     for k in list(out):
         if isinstance(out[k], list):
             out[k] = st.mean(out[k]) if "pp" in k else sum(out[k]) / len(out[k])

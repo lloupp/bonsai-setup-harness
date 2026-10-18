@@ -19,7 +19,18 @@ chmod +x linux/*.sh
 ./linux/iniciar-bonsai.sh       # http://127.0.0.1:8080
 ```
 
-API: `http://127.0.0.1:8080/v1`, modelo `bonsai-2-4b`, chave `local`. Mais detalhes em [MANUAL_SIMPLES.md](MANUAL_SIMPLES.md) e [docs/API_LOCAL.md](docs/API_LOCAL.md).
+**Acesso LAN por padrão:** o servidor escuta em `0.0.0.0:8080`. Em outro
+PC, use `http://<IP-PRIVADO-DO-SERVIDOR>:8080/v1`; no próprio PC,
+`http://127.0.0.1:8080/v1` continua funcionando. `-SomenteLocal`
+(Windows) ou `--somente-local` (Linux) desativa acesso remoto.
+
+**Segurança:** a API não tem autenticação ativa (a chave `local` não protege).
+**Restrinja a porta 8080 no firewall para sua LAN confiável antes de usar.**
+No Windows, execute uma vez como administrador
+`.\configurar-firewall-lan.ps1` para permitir apenas conexões da
+sub-rede local no perfil Privado; no Linux configure firewall equivalente.
+Consulte [configuração completa](docs/REDE_LOCAL.md) e
+[API para os agentes](docs/API_LOCAL.md).
 
 ## Configuração padrão (perfil `otimizado`)
 
@@ -37,6 +48,25 @@ Para agentes, use `temperature 0.2` e `presence_penalty 0`. O perfil `original` 
 | Claude Code, tarefa T1 | 701 s | 235 s (−66%) |
 
 Relatório completo: [RELATORIO_FINAL_BONSAI.md](RELATORIO_FINAL_BONSAI.md) ([HTML](RELATORIO_FINAL_BONSAI.html)) · O que falta testar: [PROGRESSO.md](PROGRESSO.md)
+
+## Validacao e testes pendentes
+
+O pipeline GitHub Actions executa testes **offline** de Python, Bash e Node, sem baixar ou
+iniciar os modelos. A inferencia real de 2B/4B em CPU no Ubuntu passou em 18/10/2026:
+[resultado verificado](docs/RESULTADO_LINUX_REAL_2026-10-18.md).
+Para benchmarks completos no Windows/Linux e configuracao correta do 2B,
+consulte [docs/TESTES_PENDENTES.md](docs/TESTES_PENDENTES.md).
+
+Para selecionar o modelo nos benchmarks Python, ajuste `BONSAI_MODEL` para
+`bonsai-2-2b` ou `bonsai-2-4b`; a bateria confirma o alias ativo em
+`/v1/models` antes de enviar a primeira solicitacao. No Linux, a memoria do processo
+e medida em RSS (`ws_mb`), nao em private commit (`priv_mb`) como no Windows;
+nao compare esses dois indicadores diretamente entre sistemas.
+
+**Limite de reproducibilidade:** os pesos e as instalacoes dos tres harnesses nao
+estao neste repositorio. Os scripts `run_agent_test.py` exigem os perfis e
+instalacoes locais descritos no relatorio. O CI nao comprova ganhos de performance
+nem executa os agentes.
 
 ## Estrutura
 

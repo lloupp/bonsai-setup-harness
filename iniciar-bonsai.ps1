@@ -8,7 +8,9 @@ param(
     [ValidateSet('otimizado','original')][string]$Perfil = 'otimizado',
     [int]$CacheRamMB = 2048,
     [switch]$SemVisao,
-    [switch]$SemNavegador
+    [switch]$SemNavegador,
+    # Por padrao atende a rede local; -SomenteLocal restaura o bind antigo.
+    [switch]$SomenteLocal
 )
 if ($Perfil -eq 'original') { if (-not $Contexto) { $Contexto = 262144 }; if (-not $Cache) { $Cache = 'q4_0' } }
 else { if (-not $Contexto) { $Contexto = 65536 }; if (-not $Cache) { $Cache = 'f16' } }
@@ -17,23 +19,37 @@ $base = $PSScriptRoot
 $url = "http://127.0.0.1:$Porta"
 $pidFile = Join-Path $base 'logs\server.pid'
 $modelId = 'bonsai-2-' + $Modelo.ToLowerInvariant()
+$enderecoEscuta = if ($SomenteLocal) { '127.0.0.1' } else { '0.0.0.0' }
 New-Item -ItemType Directory -Force (Join-Path $base 'logs') | Out-Null
 try {
     $health = Invoke-RestMethod "$url/health" -TimeoutSec 2
     $models = Invoke-RestMethod "$url/v1/models" -TimeoutSec 2
     if ($health.status -eq 'ok' -and $modelId -in $models.data.id) {
         $props = Invoke-RestMethod "$url/props" -TimeoutSec 2
+        $configPath = Join-Path $base 'logs\server-config.json'
+        $hostAtual = $null
+        if (Test-Path -LiteralPath $configPath) {
+            try {
+                $configAtual = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
+                if ($configAtual.pid -eq $null -or [int]$configAtual.pid -eq [int](Get-Content -LiteralPath $pidFile -Raw)) {
+                    $hostAtual = $configAtual.listenHost
+                }
+            } catch { }
+        }
+        if ($hostAtual -ne $enderecoEscuta) {
+            throw 'Servidor ja ativo com escuta desconhecida ou diferente: execute parar-bonsai.ps1 e inicie novamente.'
+        }
         Write-Host "Bonsai ja esta rodando em $url; contexto ativo: $($props.default_generation_settings.n_ctx). Para alterar, execute parar-bonsai.ps1 antes."
         if (-not $SemNavegador) { Start-Process $url }
         exit 0
     }
     throw "A porta $Porta esta ocupada por outro servidor."
 } catch {
-    if ($_.Exception.Message -like '*ocupada*') { throw }
+    if ($_.Exception.Message -like '*ocupada*' -or $_.Exception.Message -like '*escuta desconhecida ou diferente*') { throw }
 }
 $serverArgs = @(
     '-m', ('"' + (Join-Path $base "models\Ternary-Bonsai-2-$Modelo-PQ2_0.gguf") + '"'),
-    '--host', '127.0.0.1', '--port', "$Porta", '--alias', $modelId,
+    '--host', $enderecoEscuta, '--port', "$Porta", '--alias', $modelId,
     '-ngl', '0', '-c', "$Contexto", '-np', '1', '-t', '6', '-tb', '8',
     '-b', '256', '-ub', '128', '--cache-type-k', $Cache, '--cache-type-v', $Cache,
     '-fa', 'on', '--jinja', '--temp', '0.7', '--top-p', '0.8', '--top-k', '20',
@@ -57,6 +73,7 @@ $process.Id | Set-Content $pidFile
     perfil = $Perfil
     cacheRamMB = $(if ($Perfil -eq 'otimizado') { $CacheRamMB } else { 'padrao (8192)' })
     visao = (-not $SemVisao)
+    listenHost = $enderecoEscuta
 } | ConvertTo-Json | Set-Content (Join-Path $base 'logs\server-config.json')
 for ($attempt = 0; $attempt -lt 90; $attempt++) {
     if ($process.HasExited) { throw "Falha ao iniciar. Consulte logs\server.err.log." }
@@ -64,6 +81,11 @@ for ($attempt = 0; $attempt -lt 90; $attempt++) {
         $health = Invoke-RestMethod "$url/health" -TimeoutSec 2
         if ($health.status -eq 'ok') {
             Write-Host "Bonsai 2 $Modelo pronto: $url; contexto: $Contexto tokens; cache: $Cache"
+            if (-not $SomenteLocal) {
+                Write-Warning "API ouvindo em todas as interfaces IPv4, SEM autenticacao. Restrinja a porta $Porta a sua rede privada no firewall; nao exponha a Internet."
+                Write-Host "Em outro PC: http://<IP-DO-SERVIDOR>:$Porta/v1"
+                Write-Host "Para limitar ao proprio computador: .\iniciar-bonsai.ps1 -SomenteLocal"
+            }
             if (-not $SemNavegador) { Start-Process $url }
             exit 0
         }

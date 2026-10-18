@@ -1,0 +1,113 @@
+name: Teste real Bonsai 2B e 4B (Linux)
+
+on:
+  push:
+    branches:
+      - fix/benchmarks-linux-2b-ci-20261018
+    paths:
+      - .github/workflows/model-smoke.yml
+      - linux/iniciar-bonsai.sh
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar dependencias essenciais
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq curl ca-certificates coreutils tar
+      - name: Baixar runtime e GGUF oficiais com SHA256 verificado
+        run: |
+          chmod +x linux/*.sh
+          ./linux/setup-linux.sh --com-2b
+          ls -lh models/ bin-linux/llama-server
+      - name: Validar acesso LAN e bloqueio com --somente-local
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap './linux/parar-bonsai.sh || true' EXIT
+          addr=$(hostname -I | awk '{print $1}')
+          [[ -n "$addr" ]] || { echo 'Sem endereco IPv4 nao-loopback no runner.' >&2; exit 1; }
+          ./linux/iniciar-bonsai.sh --modelo 2B --contexto 2048 --cache-ram 128 --sem-visao
+          curl --noproxy '*' --connect-timeout 5 -fsS "http://$addr:8080/health"
+          curl --noproxy '*' --connect-timeout 5 -fsS "http://127.0.0.1:8080/health"
+          echo "LAN: requisições aceitas no endereco $addr e em localhost."
+          ./linux/parar-bonsai.sh
+          ./linux/iniciar-bonsai.sh --modelo 2B --contexto 2048 --cache-ram 128 --sem-visao --somente-local
+          curl --noproxy '*' --connect-timeout 5 -fsS "http://127.0.0.1:8080/health"
+          if curl --noproxy '*' --connect-timeout 3 -m 5 -fsS "http://$addr:8080/health"; then
+            echo 'ERRO: --somente-local permitiu acesso pela interface de rede.' >&2
+            exit 1
+          fi
+          echo "--somente-local: interface de rede recusou acesso como esperado."
+          ./linux/parar-bonsai.sh
+      - name: Testar inferencia real em CPU - 2B e 4B
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap './linux/parar-bonsai.sh || true' EXIT
+          mkdir -p auditoria/raw
+          for model in 2B 4B; do
+            echo "::group::Servidor e inferencia $model"
+            ./linux/iniciar-bonsai.sh --modelo "$model" --contexto 2048 --cache-ram 128 --sem-visao
+            BONSAI_MODEL="bonsai-2-${model,,}" SMOKE_LABEL="$model" python3 - <<'PY'
+          import json, os, pathlib, sys
+          sys.path.insert(0, 'auditoria/scripts')
+          from common import chat, get, verify_model
+          expected = os.environ['BONSAI_MODEL']
+          verify_model()
+          result = chat(
+              [{'role': 'user', 'content': 'Diga apenas a palavra OK.'}],
+              profile='agente', max_tokens=32, timeout=240,
+          )
+          choices = result.get('choices') or []
+          content = (choices[0].get('message') or {}).get('content') if choices else None
+          usage = result.get('usage') or {}
+          report = {
+              'model': expected,
+              'server_model_ids': [x.get('id') for x in get('/v1/models').get('data', [])],
+              'response': content,
+              'seconds': result['_wall_s'],
+              'tokens': usage.get('completion_tokens'),
+              'prompt_tokens': usage.get('prompt_tokens'),
+          }
+          print(json.dumps(report, ensure_ascii=False, indent=2), flush=True)
+          assert isinstance(content, str) and content.strip(), 'O servidor retornou resposta vazia'
+          assert usage.get('completion_tokens', 0) > 0, 'Nao houve tokens de geracao'
+          pathlib.Path('auditoria/raw/smoke_' + os.environ['SMOKE_LABEL'] + '.json').write_text(
+              json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
+          PY
+            ./linux/parar-bonsai.sh
+            echo "::endgroup::"
+          done
+      - name: Bateria funcional segura - 7 casos em 2B e 4B
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap './linux/parar-bonsai.sh || true' EXIT
+          for model in 2B 4B; do
+            ./linux/iniciar-bonsai.sh --modelo "$model" --contexto 4096 --cache-ram 128 --sem-visao
+            BONSAI_MODEL="bonsai-2-${model,,}" python3 auditoria/scripts/bench_mini.py "cpu_${model,,}"
+            ./linux/parar-bonsai.sh
+          done
+      - name: Resultado e logs de diagnostico
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bonsai-linux-smoke
+          path: |
+            auditoria/raw/smoke_*.json
+            auditoria/raw/mini_*.json
+            logs/server.err.log
+            logs/server.out.log
+          if-no-files-found: warn
+          retention-days: 7

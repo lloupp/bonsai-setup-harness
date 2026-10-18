@@ -1,0 +1,50 @@
+name: Validar scripts
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar sintaxe Bash e Python
+        run: |
+          for file in linux/*.sh; do bash -n "$file"; done
+          python -m compileall -q auditoria/scripts
+      - name: Testes offline Python
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Testes do monitor Node
+        run: node --test monitor/*.test.mjs
+      - name: Comparar dados ja registrados (sem reexecutar o modelo)
+        run: python auditoria/scripts/compare.py baseline otimizado
+
+  windows-powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar sintaxe dos scripts PowerShell
+        shell: pwsh
+        run: |
+          $paths = @('iniciar-bonsai.ps1', 'configurar-firewall-lan.ps1')
+          foreach ($path in $paths) {
+            $tokens = $null
+            $errors = $null
+            $null = [System.Management.Automation.Language.Parser]::ParseFile(
+              (Join-Path $pwd $path), [ref]$tokens, [ref]$errors)
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error "$path -> $_" }
+              exit 1
+            }
+            Write-Host "Sintaxe OK: $path"
+          }
