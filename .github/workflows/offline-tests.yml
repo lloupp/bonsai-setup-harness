@@ -20,7 +20,7 @@ jobs:
           node-version: '22'
       - name: Validar sintaxe Bash e Python
         run: |
-          bash -n linux/*.sh
+          for file in linux/*.sh; do bash -n "$file"; done
           python -m compileall -q auditoria/scripts
       - name: Testes offline Python
         run: python -m unittest discover -s tests -p 'test_*.py' -v
