@@ -19,7 +19,18 @@ chmod +x linux/*.sh
 ./linux/iniciar-bonsai.sh       # http://127.0.0.1:8080
 ```
 
-API: `http://127.0.0.1:8080/v1`, modelo `bonsai-2-4b`, chave `local`. Mais detalhes em [MANUAL_SIMPLES.md](MANUAL_SIMPLES.md) e [docs/API_LOCAL.md](docs/API_LOCAL.md).
+**Acesso LAN por padrão:** o servidor escuta em `0.0.0.0:8080`. Em outro
+PC, use `http://<IP-PRIVADO-DO-SERVIDOR>:8080/v1`; no próprio PC,
+`http://127.0.0.1:8080/v1` continua funcionando. `-SomenteLocal`
+(Windows) ou `--somente-local` (Linux) desativa acesso remoto.
+
+**Segurança:** a API não tem autenticação ativa (a chave `local` não protege).
+**Restrinja a porta 8080 no firewall para sua LAN confiável antes de usar.**
+No Windows, execute uma vez como administrador
+`.\configurar-firewall-lan.ps1` para permitir apenas conexões da
+sub-rede local no perfil Privado; no Linux configure firewall equivalente.
+Consulte [configuração completa](docs/REDE_LOCAL.md) e
+[API para os agentes](docs/API_LOCAL.md).
 
 ## Configuração padrão (perfil `otimizado`)
 
